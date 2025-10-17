@@ -1,0 +1,11 @@
+.layout-content-wrapper {
+
+    margin-top: 4rem;
+    // background-color: red;
+    // padding-top: 4rem;
+
+    .layout-content {
+        min-height: calc(100vh - 4rem);
+        padding: 2rem;
+    }
+}

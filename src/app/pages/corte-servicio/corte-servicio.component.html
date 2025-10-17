@@ -1,0 +1,321 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-2xl font-semibold">CIERRE DE SERVICIO</div>
+                <div class="font-bold text-primary">Gestion de Cierre</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                @for (tab of tabs; track tab.value) {
+                    <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="grid grid-cols-12 gap-4 ">
+                        <div  class="col-span-12 md:col-span-6" >
+                            <p-fieldset legend="Generar Listado de Cierre">
+                                <div class="grid grid-cols-12 gap-4 ">
+                                    <div  class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on">
+                                            <p-select [options]="_localidad" optionLabel="descripcion" [(ngModel)]="_gestionCorteModel.idSucursal"   
+                                                filterBy="descripcion" [filter]="true" optionValue="idSucursal" class="w-full" appendTo="body"   ></p-select> 
+                                            <label>Localidad</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full" [(ngModel)]="_gestionCorteModel.nroSuministro"  (keydown.enter)="BuscarCliente()" 
+                                                (input)="_gestionCorteModel.propietario= null;"/>
+                                            <label>Suministro</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full" [(ngModel)]="_gestionCorteModel.propietario" (keydown.enter)="BuscarCliente()"
+                                            (input)="_gestionCorteModel.nroSuministro = null;"  />
+                                            <label>Propietario</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-4">
+                                        <button pButton pRipple icon="pi pi-search" (click)="BuscarCliente()"  severity="info"  label="Cargar Cliente" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                                    </div>
+                                </div>
+                            </p-fieldset>
+                        </div>
+                        <div  class="col-span-12 md:col-span-6" >
+                            <p-fieldset legend="Parametro de Operacion Cierre">
+                                <div class="grid grid-cols-12 gap-4 ">
+                                    <div  class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on">
+                                            <p-select [options]="_tipoEstServicio" optionLabel="descripcion" (onChange)="changeEstado($event.value)"  
+                                                filterBy="descripcion" [filter]="true"  class="w-full" appendTo="body"   ></p-select> 
+                                            <label>Estado Servicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div  class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on"> <!--optionValue="idTipoMotivoOperacion" -->
+                                            <p-select [options]="_tipoMotivOpe" optionLabel="descripcion"  (onChange)="changeOperacion($event.value)"
+                                                filterBy="descripcion" [filter]="true"  class="w-full" appendTo="body"   ></p-select> 
+                                            <label>Motivo Operacion</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div  class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on"> 
+                                            <p-select [options]="_servis" optionLabel="descripcion" (onChange)="changeService($event.value)"
+                                                filterBy="descripcion" [filter]="true"  class="w-full" appendTo="body"   ></p-select> 
+                                            <label>Service</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div  class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on"> 
+                                            <p-select [options]="_inspector" optionLabel="nombres" (onChange)="changeInspector($event.value)"
+                                                filterBy="nombres" [filter]="true"   class="w-full" appendTo="body"   ></p-select> 
+                                            <label>Inspector</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-4 ">
+                                        <p-floatlabel variant="on" >
+                                            <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechacorteDpl" styleClass="w-full"/>
+                                            <label >Fecha Corte</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-4"  *ngIf="this._gestionCorteModel.idMotivoOperacionCab==2">
+                                        <p-floatlabel variant="on" >
+                                            <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" [(ngModel)]="_gestionCorteModel.fechaLimiteDpl" styleClass="w-full"/>
+                                            <label >Fecha Limite Solicitud</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-3">
+                                        <button pButton pRipple icon="pi pi-search" (click)="gestionar()"  severity="info"  label="Guardar Corte" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                                    </div>
+                                </div>
+                            </p-fieldset>
+                        </div>
+                    </div>
+                    <br>
+                    <p-table  #dt [value]="_listaCorte" scrollable="true" resizableColumns="true" scrollHeight="500px"  size="small">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center">Sec</th>
+                                <th class="text-center">Mz</th>
+                                <th class="text-center">Suministro</th>
+                                <th class="text-center">Propietario</th>
+                                <th class="text-center">Direccion</th>
+                                <th class="text-center">F. Prorroga</th>
+                                <th class="text-center">F. Cierre</th>
+                                <th class="text-center">F. Reapertura</th>
+                                <th class="text-center">Estado Servicio</th>
+                                <th class="text-center">Deuda Cobrable</th>
+                                <th class="text-center">Deuda Total</th>
+                                <th class="text-center">Deuda En Reclamo</th>
+                                <th class="text-center">Meses Deuda</th>
+                                <th class="text-center">Meses Fraccionamiento</th><!--min-width: 100px;-->
+                                <th pFrozenColumn frozenAlign="right" style="right: 0;">Asignacion</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-corte>
+                            <tr [style.backgroundColor]="corte.idEstadoServicio != 1 ? '#f8cb7d' : ''" >
+                                <td class="text-center">  
+                                    {{corte.idSector}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.idManzana}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.nroSuministro}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.propietario}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.direccion}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.fechaProrroga}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.fechaCorte}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.fechaReapertura}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.estadoServicio}}
+                                </td>
+                                <td style="text-align: right;">  
+                                    {{corte.deudaCobrable | number:'1.2-2' }}
+                                </td>
+                                <td style="text-align: right;">  
+                                    {{corte.deudaTotal | number:'1.2-2' }}
+                                </td>
+                                <td style="text-align: right;">  
+                                    {{corte.deudaEnReclamo | number:'1.2-2' }}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.nroMesesDeuda}}
+                                </td>
+                                <td class="text-center">  
+                                    {{corte.nroMesesFraccionamiento}}
+                                </td>
+                                <td pFrozenColumn frozenAlign="right" style="right: 0;">
+                                    <i class="pi pi-send" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                        (click)="onRowSelect(corte)"></i>
+                                </td>
+
+                                <!--<i class="pi pi-send" style="font-size: 1.2rem;color: rgb(0, 98, 197); cursor:pointer;" 
+                                        (click)="onRowSelect(corte)"></i>-->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <br>
+                    <p-table  #dt [value]="_listadoCore" scrollable="true"  scrollHeight="500px"  size="small">
+
+    <!-- Definición de anchos de columnas -->
+    
+
+    <!-- Encabezado -->
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="text-center">Item</th>
+            <th class="text-center">Suministro</th>
+            <th class="text-center">Propietario</th>
+            <th class="text-center">Fecha de Corte</th>
+            <th class="text-center">Insp</th>
+            <th class="text-center">Tipo de Corte de Agua</th>
+            <th class="text-center">CORE</th>
+            <th class="text-center">Tipo de Corte Desagüe</th>
+            <th class="text-center">CORE</th>
+            <th class="text-center">F. Límite Sol</th>
+            <th class="text-center">Lectura Ultima</th>
+            <th class="text-center">Observación</th>
+            <th class="text-center">Inspector</th>
+            <th class="text-center">Personal Service</th>
+            <th class="text-center">Tipo Operación</th>
+            <th class="text-center">Año</th>
+            <th class="text-center">Mes</th>
+            <th pFrozenColumn frozenAlign="right" style="right: 0;">Eliminar</th>
+        </tr>
+    </ng-template>
+
+    <!-- Cuerpo -->
+    <ng-template pTemplate="body" let-core let-rowIndex="rowIndex">
+        <tr>
+            <td class="text-center">{{ rowIndex +1}}</td>
+            <td class="text-center">{{core.nroSuministro}}</td>
+            <td style="min-width: 200px" class="text-center">{{core.propietario}}</td>
+
+            <!-- Fecha de Corte con espacio suficiente -->
+            <td style="min-width: 200px">
+                <p-datepicker  
+                    dateFormat="yy-mm-dd" 
+                    [showIcon]="true" 
+                    appendTo="body" 
+                    [(ngModel)]="core.fechaCorteCampo" 
+                    styleClass="w-full datepicker-full">
+                </p-datepicker>
+            </td>
+
+            <td class="text-center">{{core.idInspector}}</td>
+
+            <!-- Tipo de Corte Agua -->
+            <td style="min-width: 200px">
+                
+                    <p-select 
+                        [options]="_tipoCorteAgu" 
+                        optionLabel="descripcion" 
+                        optionValue="idTipoCore" 
+                        (onChange)="changeCorteAgu($event.value)"
+                        filterBy="descripcion" 
+                        [filter]="true" 
+                        [(ngModel)]="core.idTipoCorteAgua"  
+                        class="w-full" 
+                        appendTo="body">
+                    </p-select> 
+            </td>
+
+            <td class="text-center">
+                <p-checkbox [ngModel]="core.CoreAgua!= 1" [disabled]="true" binary="true"></p-checkbox>
+            </td>
+
+            <!-- Tipo de Corte Desagüe -->
+            <td style="min-width: 200px">
+                    <p-select 
+                        [options]="_tipoCorteAlca" 
+                        optionLabel="descripcion" 
+                        optionValue="idTipoCore"
+                        (onChange)="changeCorteAlca($event.value)"
+                        filterBy="descripcion" 
+                        [filter]="true" 
+                        [(ngModel)]="core.idTipoCorteAgua"  
+                        class="w-full" 
+                        appendTo="body">
+                    </p-select> 
+            </td>
+
+            <td class="text-center">
+                <p-checkbox [ngModel]="core.coreAlca!= 1" [disabled]="true" binary="true"></p-checkbox>
+            </td>
+
+            <!-- F. Límite Sol -->
+            <td style="min-width: 200px">
+                <p-datepicker  
+                    dateFormat="yy-mm-dd" 
+                    [showIcon]="true" 
+                    appendTo="body" 
+                    [(ngModel)]="core.fechaLimiteSolicitud" 
+                    styleClass="w-full datepicker-full">
+                </p-datepicker>
+            </td>
+
+            <!-- Lectura Última -->
+            <td style="min-width: 200px">
+                <p-floatlabel variant="on">
+                    <input pInputText [(ngModel)]="core.lecturaCampo"  class="w-full"/>
+                </p-floatlabel>
+            </td>
+
+            <!-- Observación -->
+            <td style="min-width: 200px">
+                <p-floatlabel variant="on">
+                    <input pInputText [(ngModel)]="core.observacion"  class="w-full"/>
+                    <label>Observación</label>
+                </p-floatlabel>
+            </td>
+
+            <td class="text-center">{{core.inspector}}</td>
+            <td style="min-width: 150px">{{core.descripcionServis}}</td>
+            <td style="min-width: 120px">{{core.descripcionCorte}}</td>
+            <td class="text-center">{{core.anio}}</td>
+            <td class="text-center">{{core.nombreMes}}</td>
+
+            <td pFrozenColumn frozenAlign="right" style="right: 0;">
+                <i class="pi pi-trash" 
+                   style="font-size: 1.3rem;color: rgb(220, 40, 8); cursor:pointer;" 
+                   (click)="removeCore(core)">
+                </i>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+                    <!--<td style="min-width: 4rem" class="text-center">
+                                        <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeCate(i)"/>
+                                    </td>-->
+
+
+                    													
+                </p-tabpanel>
+                <p-tabpanel value="1" >
+                    das
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

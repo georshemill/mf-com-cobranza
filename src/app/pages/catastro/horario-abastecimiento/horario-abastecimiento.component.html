@@ -1,0 +1,228 @@
+<div class="card grid">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-column gap-1 text-600">
+                <span class="text-2xl font-semibold"><span class="text-color">HORARIO DE ABASTECIMIENTO</span></span>
+                <span class="font-bold text-primary">Gestion Horario de Abastecimiento</span>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+        <p-button label="Nuevo Registro" icon="pi pi-plus"  severity="info"  (click)="nuevo()"></p-button>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-fieldset legend="BUSQUEDA POR LOCALIDAD">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-4" >
+                    <p-floatlabel variant="on"><!--[options]="_localidad" [(ngModel)]="_gestionCatastroModel.idSucursal"-->
+                        <p-select  optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+</div>
+<p-dialog header="GESTIONAR HORARIO DE ABASTECIMIENTO" [modal]="true" [(visible)]="dialogForm" (onHide)="ModalClose()" modal="modal" showEffect="fade" [style]="{height:'700px',width:'1200px'}"  >
+    <div class="card">
+        <p-fieldset legend="INFORMACION GENERAL">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Reservorios</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Sector Abastecimiento</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Sub Sector Abastecimiento</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Interrupciones</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-select optionLabel="descripcion"  optionValue="idSucursal"
+                            filterBy="descripcion" [filter]="true"   class="w-full"   ></p-select> 
+                        <label>Tipo Abastecimiento</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-6" >
+                    <p-floatlabel variant="on">
+                        <input pInputText  class="w-full"   />
+                        <label >Descripcion</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-12" >
+                    <p-floatlabel variant="on">
+                        <textarea pTextarea id="over_label" rows="3" cols="15" style="resize: none"  class="w-full" ></textarea>
+                        <label>Informe Sustento</label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        </p-fieldset>
+        <BR>
+        <p-fieldset legend="INFORMACION HORARIOS">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-4" >
+                    <p-fieldset legend="HORARIOS ABASTECIMIENTO">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Mañana">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Tarde">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                            <div class="col-span-12 md:col-span-6 flex items-center" >
+                                <p-checkbox  value="New York" inputId="ny"  />
+                                <label for="ny" class="ml-2">Horario Unico</label>
+                            </div> 
+                            <div class="col-span-12 md:col-span-6 " >
+                                <p-button label="Generar Horario" icon="pi pi-plus"  severity="info"  ></p-button>
+                            </div> 
+                            <div  class="col-span-12 md:col-span-12" >
+                                <p-floatlabel variant="on">
+                                    <textarea pTextarea id="over_label" rows="3" cols="8" style="resize: none" class="w-full" ></textarea>
+                                    <label>Horario Generado Para Abastecimiento</label>
+                                </p-floatlabel>
+                            </div>
+
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div  class="col-span-12 md:col-span-4" >
+                    <p-fieldset legend="HORARIOS RECLAMO">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Mañana">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Tarde">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div  class="col-span-12 md:col-span-4" >
+                    <p-fieldset legend="HORARIOS INTERRUPCIONES">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Mañana">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-panel header="Tarde">
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Inicio</label>
+                                        </p-floatlabel>
+                                    </div>
+                                    <br>
+                                    <div  class="col-span-12 md:col-span-12" >
+                                        <p-floatlabel variant="on">
+                                            <input pInputText  class="w-full"   />
+                                            <label >Fin</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+</p-dialog>

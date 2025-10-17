@@ -1,0 +1,244 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-2xl font-semibold">NOTIFICACIÓN CIERRE DE SERVICIO E INACTIVOS</div>
+                <div class="font-bold text-primary">Gestion de Notificación</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-fieldset legend="Generar Listado de Notificacion">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on"> 
+                        <p-select [options]="_ciclo" optionLabel="descripcion" optionValue="idCiclo" (onChange)="changeCiclo($event.value)"    
+                            filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionCorteModel.idCiclo"  class="w-full" appendTo="body"   ></p-select> 
+                        <label>Ciclo</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_localidad" optionLabel="descripcion"  (onChange)="changeLocalidad($event.value)"   
+                            filterBy="descripcion" [filter]="true"  class="w-full" appendTo="body"   ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on">
+                        <p-multiselect [options]="_sector" optionLabel="descripcion" class="w-full" appendTo="body"
+                                        [disabled]="localiBloque== null"   
+                                       [(ngModel)]="_gestionCorteModel.sectorList" />
+                        <label>Sector</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-multiselect [options]="_tipoServicio" optionLabel="descripcion" class="w-full" appendTo="body"
+                                        [(ngModel)]="_gestionCorteModel.tipoServicioList"/>
+                        <label>Tipo Servicio</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on">
+                        <p-multiselect [options]="_tipoEstServicio" optionLabel="descripcion" class="w-full" appendTo="body"
+                             [(ngModel)]="_gestionCorteModel.estadoServicioList" />
+                        <label>Estado Servicio</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-fieldset legend="Nro. Meses Adeudados">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div class="col-span-12 md:col-span-6" >
+                                <p-floatlabel variant="on">
+                                    <input pInputText type="number" class="w-full" [(ngModel)]="_gestionCorteModel.rangoMesesInicial"  />
+                                    <label>Desde</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-6" >
+                                <p-floatlabel variant="on">
+                                    <input pInputText type="number" class="w-full" [(ngModel)]="_gestionCorteModel.rangoMesesFinal" />
+                                    <label>Hasta</label>
+                                </p-floatlabel>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-fieldset legend="Importes Adeudados">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div class="col-span-12 md:col-span-6" >
+                                <p-floatlabel variant="on">
+                                    <input pInputText  class="w-full" type="number"  [max]="99999"  [(ngModel)]="_gestionCorteModel.importeInicial"  />
+                                    <label>Desde</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-6" >
+                                <p-floatlabel variant="on">
+                                    <input pInputText  class="w-full" type="number"    [max]="99999"  [(ngModel)]="_gestionCorteModel.importeFinal" />
+                                    <label>Hasta</label>
+                                </p-floatlabel>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div  class="col-span-12 md:col-span-6" >
+                    <p-fieldset legend="Otros">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div class="col-span-12 md:col-span-4 flex items-center" >
+                                <p-checkbox  binary="true" [ngModel]="_gestionCorteModel.incluyeRefinanciamiento === 1"
+                                    (onChange)="setCheckboxValue('incluyeRefinanciamiento', $event.checked)"/>
+                                <label for="ny" class="ml-2">Incluye deuda refinanciada</label>
+                            </div>
+                            <div  class="col-span-12 md:col-span-6" >
+                                <p-floatlabel variant="on"><!--(onChange)="changeLocalidad($event.value)"  [(ngModel)]="_gestionCorteModel.idSucursal"-->
+                                    <p-select [options]="_tipOrdenamiento" optionLabel="descripcion" optionValue="idTipoOrdenamiento"   
+                                        filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"  [(ngModel)]="_gestionCorteModel.idOrdenamiento"  ></p-select> 
+                                    <label>Ordenado Por</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-2">
+                                <button pButton pRipple icon="pi pi-search" (click)="Gestionar()"  severity="info"  label="Procesar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+        </p-fieldset>
+        <p-fieldset legend="Parametro de Registro" *ngIf="blockTable == 1">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on"> 
+                        <p-select [options]="_servis" optionLabel="descripcion" optionValue="idService" 
+                            filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionCorteModel.idService"  class="w-full" appendTo="body"   ></p-select> 
+                        <label>Service</label>
+                    </p-floatlabel>
+                </div>
+                <div  class="col-span-12 md:col-span-3" >
+                    <p-floatlabel variant="on"> 
+                        <p-select [options]="_tipoMotivOpe" optionLabel="descripcion" optionValue="idTipoMotivoOperacion"   
+                            filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionCorteModel.idMotivoOperacion"  class="w-full" appendTo="body"   ></p-select> 
+                        <label>Motivo Operacion</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-6" >
+                    <p-floatlabel variant="on">
+                        <input pInputText  class="w-full" [(ngModel)]="_gestionCorteModel.descripcion" />
+                        <label>Descripcion</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 md:col-start-4">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechaInicioDpl" styleClass="w-full"/>
+                        <label >Fecha Inicio</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechaLimiteDpl" styleClass="w-full"/>
+                        <label >Fecha Limite</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-search" (click)="GuardarCorte()"  severity="info"  label="Guardar Padron" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-print" (click)="viewPDF()"  severity="success"  label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+            </div>
+        </p-fieldset>
+        <br>
+        <p-table  #dt [value]="_listaCorte" scrollable="true" resizableColumns="true" scrollHeight="500px"  size="small" *ngIf="blockTable == 1">
+                <ng-template pTemplate="header">
+                    <tr >
+                        <th class="text-center">Ítem</th>
+                        <th class="text-center">Ciclo</th>
+                        <th class="text-center">Loc</th>
+                        <th class="text-center">Sec</th>
+                        <th class="text-center">Mza</th>
+                        <th class="text-center">Lote</th>
+                        <th class="text-center">Slote</th>
+                        <th class="text-center">Ruta</th>
+                        <th class="text-center">Orden</th>
+                        <th class="text-center">TS</th>
+                        <th class="text-center">ES</th>
+                        <th class="text-center">Suministro</th>
+                        <th class="text-center">Medidor</th>
+                        <th class="text-center">Propietario</th>
+                        <th class="text-center">Direccion</th>
+                        <th class="text-center">NroCalle</th>
+                        <th class="text-center">Meses</th>
+                        <th class="text-center">M. Fracc</th>
+                        <th class="text-center" >Deuda</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-corte>
+                    <tr >
+                        <td class="text-center">  
+                            {{corte.item}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.idCiclo}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.idSucursal}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.idSector}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.idManzana}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroLote}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroSubLote}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.idRutaReparto}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.ordenRutaReparto}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.tipoServicio}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.estadoServicio}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroSuministro}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroMedidor}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.propietario}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.direccion2}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroCalle}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroMesesDeuda}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.nroMesesFraccionamiento}}
+                        </td>
+                        <td class="text-center">  
+                            {{corte.deudaCobrable}}
+                        </td>
+                    </tr>
+                </ng-template>
+        </p-table>
+
+    </div>
+</div>
+
+<p-dialog  [(visible)]="displayPDF" modal="modal" showEffect="fade" [style]="{height:'1600px',width:'1550px'}">
+    <iframe width="100%" height="100%"   [src]="urlView |safe:'resourceUrl'"></iframe>
+</p-dialog>

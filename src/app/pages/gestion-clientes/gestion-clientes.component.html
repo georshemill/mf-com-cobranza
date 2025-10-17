@@ -1,0 +1,224 @@
+<div class="card grid">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-column gap-1 text-600">
+                <span class="text-2xl font-semibold"><span class="text-color">GESTION DE CLIENTES</span></span>
+                <span class="font-bold text-primary">Gestion Personas</span>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+        <p-button label="Nuevo Registro" icon="pi pi-plus"  severity="info"  (click)="nuevo()"></p-button>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <h5 class="font-bold " >Busqueda por Datos de Usuario</h5>
+            <br>
+                <div class="grid grid-cols-12 gap-4">
+                    <!-- Contenedor centrado que agrupa todos los inputs -->
+                    <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
+                      <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-3">
+                            <p-floatlabel variant="on">
+                                <input pInputText class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="nrodocumento" (input)="datos = '';" />
+                                <label >Nro Documento</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-5">
+                            <p-floatlabel variant="on"><!--(input)="nrodocumento = ''; datos = (datos || '').toUpperCase();"-->
+                                <input  pInputText  class="w-full" [(ngModel)]="datos" (keydown.enter)="Busqueda()"  (input)="nrodocumento = '';datos = (datos || '').toUpperCase()"/>
+                                <label >Datos Personales</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-2">
+                            <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+            <p-tabs value="0" *ngIf="blockTable==1">
+                <p-tablist>
+                    <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Gestion de Personas</p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel value="0" >
+                        <div class="card">
+                            <p-table #dt [value]="_personas" responsiveLayout="scroll" [rows]="20" [globalFilterFields]="['from', 'title', 'apellidos','nroDocIdentidad']"
+                                [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true"
+                                currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros" >
+                                <ng-template #caption>
+                                    <div class="flex flex-wrap items-center justify-between gap-3">
+                                        <h5 class="text-1xl font-semibold text-900">LISTADO DE PERSONAS</h5>
+                                        <div class="flex gap-2 items-center">
+                                        </div>
+                                        <div class="flex flex-col md:flex-row gap-4">
+                                            <p-inputgroup>
+                                                <p-inputgroup-addon >
+                                                    <i class="pi pi-search" ></i>
+                                                </p-inputgroup-addon>
+                                                <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilter(dt, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                            </p-inputgroup>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr class="fs-12">
+                                        <th style="width: 4%" class="text-center" >IdPersona</th>
+                                        <th style="width: 12%" class="text-center" >Tipo Documento</th>
+                                        <th style="width: 12%"  >Nro Documento</th>
+                                        <th style="width: 12%" >Persona</th>
+                                        <th style="width: 12%" class="text-center" >Razon Social</th>
+                                        <th style="width: 7%" class="text-center" >Estado</th>
+                                        <th style="width: 12%" class="text-center" >Creador</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-personas>
+                                    <tr (mouseenter)="toggleOptions($event, options, user)" (mouseleave)="toggleOptions($event, options, user)" >
+                                        <td style="min-width: 4rem" class="text-center">
+                                            {{ personas.idPersona}}
+                                        </td>
+                                        <td style="min-width: 12rem" class="text-center">  
+                                            {{ personas.idTipoDocIdentidad}}
+                                        </td>
+                                        <td style="min-width: 4rem" >
+                                            {{ personas.nroDocIdentidad}}
+                                        </td>
+                                        <td style="min-width: 4rem" >
+                                            {{ personas.nombreCompleto}}
+                                        </td>
+                                        <td style="min-width: 4rem" class="text-center">
+                                            {{ personas.razonSocial}}
+                                        </td>
+                                        <td style="min-width: 12rem" class="text-center">
+                                            <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                <span  class="product-badge  fs-12" [ngClass]="{'status-instock': personas.estado == true, 'status-outofstock': personas.estado == false}">
+                                                <span  class="fs-12 pi " [ngClass]="{'pi-check': personas.estado == true, ' pi-times': personas.estado == false}"></span> {{personas.estado == true ? 'Activo' : 'Inactivo'}}</span> 
+                                            </span>
+                                        </td>
+                                        <td style="width: 12rem;" >
+                                            <div class="flex justify-content-center w-full px-0">
+                                                <span #user >
+                                                    {{ personas.usuarioCreacion }}
+                                                </span>
+                                                <div style="display: none" #options>
+                                                    <button pButton pRipple icon="pi pi-pencil" class="p-button-success h-8 w-8 mr-2" (click)="editar($event, personas)" pTooltip="Editar" tooltipPosition="top" type="button" *ngIf="personas.estado == true" ></button>
+                                                    <!--<button pButton pRipple icon="pi pi-trash" class="p-button-danger h-8 w-8 mr-2"  (click)="desactivar($event, tipoabastecimiento)" pTooltip="Eliminar" tooltipPosition="top" type="button"  *ngIf="tipoabastecimiento.estado == true" ></button>
+                                                    <button pButton pRipple icon="pi pi-check" class="p-button-warning h-8 w-8rem"  (click)="activar($event, tipoabastecimiento)" pTooltip="Activar" tooltipPosition="top" type="button" *ngIf="tipoabastecimiento.estado == false"></button>-->
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </div>
+    </div>
+</div>
+<p-dialog header="GESTIONAR CLIENTES" [modal]="true" [(visible)]="dialogForm" (onHide)="ModalClose()" modal="modal" [closeOnEscape]="false" showEffect="fade" [style]="{height:'600px',width:'1050px'}"  >
+    <br>
+    <div class="card">
+        <p-fieldset legend="INFORMACION GENERAL">
+            <div  class="grid grid-cols-12 gap-4 ">
+                <div [formGroup]="formPersona" class="col-span-12 md:col-span-2" *ngIf="new == 0">
+                    <p-floatlabel variant="on">
+                        <input pInputText  class="w-full" formControlName="idPersona"  />
+                        <label >Código Persona</label>
+                    </p-floatlabel>
+                </div>
+                <div [formGroup]="formPersona"  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_tipoDocumento" optionLabel="descripcionCorta"  optionValue="idTipoDocIdentidad" (onChange)="onSelectDoc($event.value)"
+                            filterBy="descripcionCorta" [filter]="true"  class="w-full" formControlName="idTipoDocIdentidad" ></p-select> 
+                        <label>Tipo Documento </label>
+                    </p-floatlabel>
+                </div>
+                <div [formGroup]="formPersona" class="col-span-12 md:col-span-5" *ngIf="formPersona.get('idTipoDocIdentidad')?.value === '06'">
+                    <p-floatlabel variant="on">
+                        <input formControlName="ruc" pInputText knifeOnlyNumbers maxlength="11" class="w-full" 
+                               [ngClass]="{ 'is-invalid': formPersona.controls.ruc.invalid && (formPersona.controls.ruc.touched || validaForm)}" />
+                        <label >RUC</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.ruc.invalid && (formPersona.controls.ruc.dirty || formPersona.controls.ruc.touched || validaForm )" class="text-danger">
+                        {{ getErrorMessage('ruc') }}
+                    </small>
+                </div>
+                <div [formGroup]="formPersona"  class="col-span-12 md:col-span-5" *ngIf="formPersona.get('idTipoDocIdentidad')?.value === '06'">
+                    <p-floatlabel variant="on">
+                        <input pInputText formControlName="razonSocial" class="w-full" (input)="toUpperCase('razonSocial')"
+                               [ngClass]="{ 'is-invalid': formPersona.controls.razonSocial.invalid && (formPersona.controls.razonSocial.touched || validaForm)}" />
+                        <label >Razón Social</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.razonSocial.invalid && (formPersona.controls.razonSocial.dirty || formPersona.controls.razonSocial.touched || validaForm)" class="text-danger">
+                        {{ getErrorMessage('razonSocial') }}
+                    </small>
+                </div>
+                <div [formGroup]="formPersona"  class="col-span-12 md:col-span-2" *ngIf="formPersona.get('idTipoDocIdentidad')?.value != '06'">
+                    <p-floatlabel variant="on">
+                        <input pInputText formControlName="dni"  class="w-full"
+                               [ngClass]="{ 'is-invalid': formPersona.controls.dni.invalid && (formPersona.controls.dni.touched || validaForm)}" />
+                        <label >Nro. Documento</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.dni.invalid && (formPersona.controls.dni.dirty || formPersona.controls.dni.touched || validaForm)" class="text-danger">
+                        {{ getErrorMessage('dni') }}
+                    </small>
+                </div>
+                <div [formGroup]="formPersona"  class="col-span-12 md:col-span-4" *ngIf="formPersona.get('idTipoDocIdentidad')?.value != '06'">
+                    <p-floatlabel variant="on">
+                        <input pInputText formControlName="nombres"  class="w-full"
+                               [ngClass]="{ 'is-invalid': formPersona.controls.nombres.invalid && (formPersona.controls.nombres.touched || validaForm)}" />
+                        <label >Nombres</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.nombres.invalid && (formPersona.controls.nombres.dirty || formPersona.controls.nombres.touched || validaForm)" class="text-danger">
+                        {{ getErrorMessage('nombres') }}
+                    </small>
+                </div>
+                <div [formGroup]="formPersona"  class="col-span-12 md:col-span-4" *ngIf="formPersona.get('idTipoDocIdentidad')?.value != '06'">
+                    <p-floatlabel variant="on">
+                        <input pInputText formControlName="apellidos"  class="w-full"
+                               [ngClass]="{ 'is-invalid': formPersona.controls.apellidos.invalid && (formPersona.controls.apellidos.touched || validaForm)}" />
+                        <label >Apellidos</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.apellidos.invalid && (formPersona.controls.apellidos.dirty || formPersona.controls.apellidos.touched || validaForm )" class="text-danger">
+                        {{ getErrorMessage('apellidos') }}
+                    </small>
+                </div>
+                <div [formGroup]="formPersona"  [ngClass]="{
+                    'col-span-12 md:col-span-7 md:col-start-3': new != 0,
+                    'col-span-12 md:col-span-8': new == 0
+                  }">
+                    <p-floatlabel variant="on">
+                        <input pInputText formControlName="domicilioLegal"  class="w-full"
+                               [ngClass]="{ 'is-invalid': formPersona.controls.domicilioLegal.invalid && (formPersona.controls.domicilioLegal.touched || validaForm)}" />
+                        <label >Domicilio Legal</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.domicilioLegal.invalid && (formPersona.controls.domicilioLegal.dirty || formPersona.controls.domicilioLegal.touched || validaForm )" class="text-danger">
+                        {{ getErrorMessage('domicilioLegal') }}
+                    </small>
+                </div>
+                <!--<div [formGroup]="formPersona"  class="col-span-12 md:col-span-3">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker formControlName="fechaNac"  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" styleClass="w-full"
+                                      [ngClass]="{ 'is-invalid': formPersona.controls.fechaNac.invalid && formPersona.controls.fechaNac.touched}" />
+                        <label >Fecha de Nacimiento</label>
+                    </p-floatlabel>
+                    <small *ngIf="formPersona.controls.fechaNac.invalid && (formPersona.controls.fechaNac.dirty || formPersona.controls.fechaNac.touched )" class="text-danger">
+                        {{ getErrorMessage('fechaNac') }}
+                    </small>
+                </div>-->
+            </div>
+        </p-fieldset>
+        <br>
+            <div class="grid ">
+                <div class="col-span-12 flex flex-wrap justify-center gap-2">
+                    <button pButton pRipple type="button"  icon="pi pi-check" *ngIf="new ==1"  (click)="gestionar()" class="p-button-rounded p-button-info mr-2 mb-2" label="Crear Registro" ></button>
+                    <button pButton pRipple type="button" icon="pi pi-check" (click)="gestionar()" *ngIf="new ==0" class="p-button-rounded p-button-info mr-2 mb-2" label="Modificicar Registro" ></button>
+                    <button pButton pRipple type="button" (click)="dialogForm=false"  icon="pi pi-arrow-left"  class="p-button-rounded p-button-danger mr-2 mb-2" label="Regresar al Listado" ></button>
+                </div>
+            </div>
+    </div>
+</p-dialog>

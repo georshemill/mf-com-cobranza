@@ -1,0 +1,202 @@
+
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-12">
+            <p-inputgroup>
+                <p-floatlabel variant="on">
+                    <p-inputnumber  class="w-full" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" [(ngModel)]="_modalFiltro.nroSuministro" (keydown.enter)="Busqueda()" />
+                    <label >Busqueda</label>
+                </p-floatlabel>
+                <p-inputgroup-addon>
+                    <p-button  icon="pi pi-search-plus" severity="secondary" (click)="dialogForm=true"    />
+                </p-inputgroup-addon>
+            </p-inputgroup>
+        </div>
+    </div>
+<p-dialog header="BUSQUEDA DE CLIENTE" [modal]="true" [(visible)]="dialogForm" (onHide)="ModalClose()" modal="modal" showEffect="fade"   [style]="{height:'700px',width:'1200px'}" [maximizable]="true" >
+    <br>
+    <div class="card" >
+        <div class="grid grid-cols-12 gap-4 ">
+            <div class="col-span-12 md:col-span-2 flex items-center" >
+                <p-checkbox   binary="true"  [(ngModel)]="_modalFiltro.checkSucursal" (ngModelChange)="actualizaSucursal($event)" />
+                <label for="ny" class="ml-2">Todos las Sucursales</label>
+            </div> 
+            <div  class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" [disabled]="blockLocalidad!= 0"
+                            filterBy="descripcion" [filter]="true"   class="w-full"  [(ngModel)]="_modalFiltro.idSucursal" ></p-select> 
+                    <label>Localidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltro.direccion" appUppercase autocomplete="off" />
+                    <label>Calle</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltro.urbanizacion" appUppercase autocomplete="off" />
+                    <label>Urbanizacion</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.nroSuministro"  />
+                    <label>Nro Suministro</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.codigoAntiguo" />
+                    <label>Codigo Antiguo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.nroMedidor" />
+                    <label>Nro Medidor</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.nroDocIdentidad" />
+                    <label>Nro Documento Identidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.recibo"/>
+                    <label>Nro Recibo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-10" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_modalFiltro.propietario" appUppercase/>
+                    <label>Propietario</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2">
+                <button pButton pRipple icon="pi pi-search"  severity="info"  label="Buscar Cliente" iconPos="right" (click)="Busqueda()" class="p-button p-button-warning  mr-2" ></button>
+            </div>
+        </div>
+        <br>
+        <p-tabs value="0" *ngIf="blockTable==1">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado de Busqueda</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card">
+                        <p-table #dt [value]="_filtroCliente" selectionMode="single" (onRowSelect)="onRowSelect($event);"
+                        scrollable="true" scrollHeight="400px" resizableColumns="true">
+                            <ng-template #caption>
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <h5 class="text-1xl font-semibold text-900">LISTADO DE CLIENTES</h5>
+                                    <div class="flex gap-2 items-center">
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon >
+                                                <i class="pi pi-search" ></i>
+                                            </p-inputgroup-addon>
+                                            <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilter(dt, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center">Sucursal</th>
+                                    <th class="text-center">Nro Suministro</th>
+                                    <th class="text-center">Nro Medidor</th>
+                                    <th class="text-center">Codigo Antiguo</th>
+                                    <th class="text-center">Propietario</th>
+                                    <th class="text-center">Nro Documento</th>
+                                    <th class="text-center">Calle</th>
+                                    <th class="text-center" >Nro Calle</th>
+                                    <th class="text-center" >Referencia</th>
+                                    <th class="text-center" >Asociacion</th>
+                                    <th class="text-center" >Estado</th>
+                                    <th class="text-center" >Tipo Usuario</th>
+                                    <th class="text-center" >Tipo Servicio</th>
+                                    <th class="text-center" >Sector</th>
+                                    <th class="text-center" >Nro. Mza</th>
+                                    <th class="text-center" >Nro Lote</th>
+                                    <th class="text-center" >Ciclo</th>
+                                    <th class="text-center" >RutaDistrib</th>
+                                    <th class="text-center" >Orden</th>
+                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100"> Acciones</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-listado>
+                                <tr  [pSelectableRow]="listado">
+                                    <td>{{listado.sucursal }}</td>
+                                    <td class="text-center">  
+                                        {{listado.nroSuministro}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroMedidor}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.codigoAntiguo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.propietario}}
+                                    </td>                                    
+                                    <td class="text-center">  
+                                        {{listado.nroDocIdentidad}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.direccion2}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroCalle}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.referencia}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.urbanizacion}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.estadoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoUsuario}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.sector}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idManzana}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroLote}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ciclo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idRutaReparto}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ordenRutaReparto}}
+                                    </td>
+                                    <td  pFrozenColumn frozenAlign="right" style="right: 0;"  class="frozen-right-cell">
+                                        <button pButton icon="pi pi-pencil" class="p-button-sm"(click)="onRowSelect({ data: listado })"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-dialog>
+
+
+    
