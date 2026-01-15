@@ -11,6 +11,8 @@ import { Servis } from '../../models/Servis';
 import { Inspector } from '../../models/Inspector';
 import { DetallePadronCorte } from '../../models/DetallePadronCorte';
 import { TipoCorte } from '../../models/TipoCorte';
+import { GlobalSession } from '../utils/globalSession';
+import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
 
 @Component({
   selector: 'app-corte-servicio',
@@ -20,6 +22,12 @@ import { TipoCorte } from '../../models/TipoCorte';
   providers: [CobranzaService]
 })
 export class CorteServicioComponent implements OnInit  {
+
+  idEmpresaTk = GlobalSession.idEmpresa;
+  idSedeTk = GlobalSession.idSede;
+  usuarioTk = GlobalSession.usuario;
+  idUsuarioTk = GlobalSession.idUsuario;
+
   _localidad:Localidad[] = []
   _tipoEstServicio:TipoEstServicio[] = []
   _tipoMotivOpe:TipoMotivOpe[] = []
@@ -142,21 +150,26 @@ export class CorteServicioComponent implements OnInit  {
     return;
     }
 
-    this._gestionCorteModel.idSede=1
-    this._gestionCorteModel.idEmpresa=1
+    this._gestionCorteModel.idSede=this.idSedeTk
+    this._gestionCorteModel.idEmpresa=this.idEmpresaTk
+
+    showGlobalLoader()
 
     this.cobranzaService.consultaCorteServicio(this._gestionCorteModel).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
           this._listaCorte = data.data;
+          hideGlobalLoader()
           //this.blockTable = 1;
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._listaCorte = [];
           //this.blockTable=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._listaCorte = [];
         //this.blockTable=0
@@ -170,7 +183,7 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
 */
 
   onRowSelect(x:any){
-    console.log(x)
+   //console.log(x)
 
     if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Estado de Servicio");
@@ -245,27 +258,32 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
 
 
   gestionar(){
-    this._gestionCorteModel.usuarioCreacion="TEST"
+    this._gestionCorteModel.usuarioCreacion=this.usuarioTk
     
     this._gestionCorteModel.coreList=this._listadoCore
 
-    console.log(this._gestionCorteModel)
+    //console.log(this._gestionCorteModel)
+
+    showGlobalLoader()
 
     this.cobranzaService.registraCore(this._gestionCorteModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
           this.blockTable = 0;
+          hideGlobalLoader()
           this.funcionesService.popupExito("Confirmacion","El Registro se Genero Correctamente");
           this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Padron Generado',life: 3000});
 
          
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Error de Ejecucion", respuesta.message);
           this._listaCorte = [];
           this.blockTable=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Error de Ejecucion", "Intente nuevamente");
         this._listaCorte = [];
         this.blockTable=0

@@ -15,6 +15,8 @@ import { TipoMotivOpe } from '../../models/TipoMotivOpe';
 import { Servis } from '../../models/Servis';
 import { ClienteCorte } from '../../models/ClienteCorte';
 import { GestionPadronCorte } from '../../models/GestionPadronCorte';
+import { GlobalSession } from '../utils/globalSession';
+import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
 
 
 
@@ -30,6 +32,12 @@ type IntBooleanKeys<T> = {
 })
 export class PadronCorteServicioComponent implements OnInit {
 
+
+  idEmpresaTk = GlobalSession.idEmpresa;
+  idSedeTk = GlobalSession.idSede;
+  usuarioTk = GlobalSession.usuario;
+  idUsuarioTk = GlobalSession.idUsuario;
+  
   _localidad:Localidad[] = []
   _sector:Sector[] = []
   _ciclo:Ciclo[] = []
@@ -145,21 +153,25 @@ export class PadronCorteServicioComponent implements OnInit {
   
 
   Gestionar(){
-    this._gestionCorteModel.idSede=1
-    this._gestionCorteModel.idEmpresa=1
+    this._gestionCorteModel.idSede=this.idSedeTk
+    this._gestionCorteModel.idEmpresa=this.idEmpresaTk
 
+    showGlobalLoader()
     this.cobranzaService.consultaListaCorte(this._gestionCorteModel).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
           this._listaCorte = data.data;
           this.blockTable = 1;
+          hideGlobalLoader()
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._listaCorte = [];
           this.blockTable=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._listaCorte = [];
         this.blockTable=0
@@ -169,7 +181,7 @@ export class PadronCorteServicioComponent implements OnInit {
 
   GuardarCorte(){
 
-    this._gestionCorteModel.usuarioCreacion="TEST"
+    this._gestionCorteModel.usuarioCreacion=this.usuarioTk
 
     const fechas = [
       'fechaInicio',
@@ -191,7 +203,7 @@ export class PadronCorteServicioComponent implements OnInit {
       deudaTotal: g.deudaCobrable!
     }));
 
-
+    showGlobalLoader()
     this.cobranzaService.registraPadronCorte(this._gestionCorteModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
@@ -206,18 +218,21 @@ export class PadronCorteServicioComponent implements OnInit {
           this._gestionCorteModel.fechaInicioDpl=null
           this._gestionCorteModel.fechaLimiteDpl=null
           this.blockTable = 0;
+          hideGlobalLoader()
           let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
           this.funcionesService.popupExitoCrud(mensajeAlert);
           this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Padron Generado',life: 3000});
 
          
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Error de Ejecucion", respuesta.message);
           this._listaCorte = [];
           this.blockTable=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Error de Ejecucion", "Intente nuevamente");
         this._listaCorte = [];
         this.blockTable=0

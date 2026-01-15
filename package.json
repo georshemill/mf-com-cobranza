@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:mf-com-cobranza": "node dist/mf-com-consultas/server/server.mjs",
+    "serve:ssr:mf-com-cobranza": "node dist/mf-com-cobranza/server/server.mjs",
     "build:single-spa:mf-ccom-cobranza": "ng build mf-com-cobranza --configuration production",
     "serve:single-spa:mf-com-cobranza": "ng s --project mf-com-cobranza --disable-host-check --port 1009 --live-reload false"
   },
