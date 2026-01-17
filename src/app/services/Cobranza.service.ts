@@ -82,6 +82,7 @@ import { TipoMotivOpe } from '../models/TipoMotivOpe';
 import { GestionCorte } from '../models/GestionCorte';
 import { Inspector } from '../models/Inspector';
 import { TipoCorte } from '../models/TipoCorte';
+import { Paramae } from '../models/Paramae';
 
 
 
@@ -538,6 +539,9 @@ export class CobranzaService {
         return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registrarCore`, model);
     }
 
+    ConsultaParamae(model:Partial <Paramae>): Observable<ListResponse<Paramae>> {
+        return this.http.post<ListResponse<Paramae>>(`https://gateway1.emapasalas.net.pe/Paramae/ConsultaTipo`,model);
+    }
 
     
 

@@ -48,6 +48,7 @@ export class PadronCorteServicioComponent implements OnInit {
   _servis:Servis[] = []
   displayPDF:boolean=false
   urlView: string=""
+  urlImpresion: string=""
 
 
   _gestionCorteModel:GestionPadronCorte=new GestionPadronCorte
@@ -92,6 +93,10 @@ export class PadronCorteServicioComponent implements OnInit {
     this.cobranzaService.dropdownTipoMotivoOperacion(1).subscribe((respuesta) => {
       this._tipoMotivOpe=respuesta.data
     })
+
+    this.cobranzaService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
+      this.urlImpresion= data.data.valorParametro
+    });
 
 
     
@@ -244,7 +249,7 @@ export class PadronCorteServicioComponent implements OnInit {
 
   viewPDF(){
     
-    this.urlView="http://apisistemas.ddns.net/comercialWEB/cortes/ordenCore.php?idempresa=1&idsede=2&nroordencore=44"
+    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=2&nroordencore=44`;
     this.displayPDF=true
   }
 
