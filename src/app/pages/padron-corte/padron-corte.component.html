@@ -144,7 +144,7 @@
                     <button pButton pRipple icon="pi pi-search" (click)="GuardarCorte()"  severity="info"  label="Guardar Padron" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <button pButton pRipple icon="pi pi-print" (click)="viewPDF()"  severity="success"  label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                    <button pButton pRipple icon="pi pi-print" (click)="viewPDF()"  severity="success"  label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockTable ==1" ></button>
                 </div>
             </div>
         </p-fieldset>

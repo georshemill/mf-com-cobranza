@@ -47,6 +47,7 @@ export class PadronCorteServicioComponent implements OnInit {
   _tipoMotivOpe:TipoMotivOpe[] = []
   _servis:Servis[] = []
   displayPDF:boolean=false
+  impPadron: number=0
   urlView: string=""
   urlImpresion: string=""
 
@@ -222,9 +223,10 @@ export class PadronCorteServicioComponent implements OnInit {
           this._gestionCorteModel.descripcion=null
           this._gestionCorteModel.fechaInicioDpl=null
           this._gestionCorteModel.fechaLimiteDpl=null
-          this.blockTable = 0;
+          this.blockTable = 1;
           hideGlobalLoader()
-          let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+          this.impPadron=respuesta.dataId
+          let mensajeAlert="Se Genero Orden de Corte Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
           this.funcionesService.popupExitoCrud(mensajeAlert);
           this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Padron Generado',life: 3000});
 
@@ -249,7 +251,7 @@ export class PadronCorteServicioComponent implements OnInit {
 
   viewPDF(){
     
-    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=2&nroordencore=44`;
+    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${this.impPadron}`;
     this.displayPDF=true
   }
 
