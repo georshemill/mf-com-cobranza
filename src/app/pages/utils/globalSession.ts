@@ -1,32 +1,34 @@
-import { AuthAPI, OptionsAPI, JwtUtils, Session, StorageConstants } from '@test/mf-utils-modules';
-
 export class GlobalSession {
   static get idEmpresa(): number {
-    return Session.get('IDEMPRESA');
+    const value = localStorage.getItem('IDEMPRESA');
+    return value ? parseInt(value, 10) : 0;
   }
 
   static get idSede(): number {
-    return Session.get('IDSEDE');
+    const value = localStorage.getItem('IDSEDE');
+    return value ? parseInt(value, 10) : 0;
   }
 
-  static get idUsuario(): number  {
-    return Session.get('IDUSUARIO');
+  static get idUsuario(): number {
+    const value = localStorage.getItem('IDUSUARIO');
+    return value ? parseInt(value, 10) : 0;
   }
 
-  static get usuario(): any {
-    return Session.get('USUARIO');
+  static get usuario(): string {
+    return localStorage.getItem('USUARIO') || '';
   }
 
-  static get nombre(): any {
-    return Session.get('NOMBRE');
+  static get nombre(): string {
+    return localStorage.getItem('NOMBRE') || '';
   }
-
 
   static clear(): void {
-    Session.remove('IDEMPRESA');
-    Session.remove('IDSEDE');
-    Session.remove('IDUSUARIO');
-    Session.remove('USUARIO');
-    Session.remove('NOMBRE');
+    localStorage.removeItem('IDEMPRESA');
+    localStorage.removeItem('IDSEDE');
+    localStorage.removeItem('IDUSUARIO');
+    localStorage.removeItem('USUARIO');
+    localStorage.removeItem('NOMBRE');
+    localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem('USER_INFO');
   }
 }
