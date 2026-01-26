@@ -106,7 +106,7 @@ export class PadronCorteServicioComponent implements OnInit {
     /*this.cobranzaService.dropdownCiclo(1).subscribe((respuesta) => {
       this._ciclo=respuesta.data
     })*/
-    this.cobranzaService.dropdownCiclo(1).pipe(
+    this.cobranzaService.dropdownCiclo(this.idSedeTk).pipe(
       map((resp: ListResponse<Ciclo[]>) => [
           {idSucursal: null, idCiclo: 0, sucursal: null, descripcion: 'TODOS',
           idSectorOperacional: 1,sectorOperacional:'' },
@@ -121,7 +121,7 @@ export class PadronCorteServicioComponent implements OnInit {
     /*this.cobranzaService.dropdownLocalidadxCiclo(1,x).subscribe((respuesta) => {
       this._localidad=respuesta.data
     })*/
-    this.cobranzaService.dropdownLocalidadxCiclo(1,x).pipe(
+    this.cobranzaService.dropdownLocalidadxCiclo(this.idSedeTk,x).pipe(
       map((resp: ListResponse<Localidad[]>) => [
           {idSucursal: 0,idCiclo:0, descripcion: 'TODOS'},
           ...(resp.data ?? [])  ])
