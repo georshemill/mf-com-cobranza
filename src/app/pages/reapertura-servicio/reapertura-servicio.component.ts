@@ -15,13 +15,13 @@ import { GlobalSession } from '../utils/globalSession';
 import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
 
 @Component({
-  selector: 'app-corte-servicio',
+  selector: 'app-reapertura-servicio',
   imports: [ParametrosModule],
-  templateUrl: './corte-servicio.component.html',
-  styleUrl: './corte-servicio.component.scss',
+  templateUrl: './reapertura-servicio.component.html',
+  styleUrl: './reapertura-servicio.component.scss',
   providers: [CobranzaService]
 })
-export class CorteServicioComponent implements OnInit  {
+export class ReaperturaServicioComponent implements OnInit  {
 
   idEmpresaTk = GlobalSession.idEmpresa;
   idSedeTk = GlobalSession.idSede;
@@ -47,8 +47,8 @@ export class CorteServicioComponent implements OnInit  {
 
 
   tabs = [
-    { title: 'Corte Programado', value: "0", icon: 'pi pi-user-edit' },
-    { title: 'Corte Padron', value: "1", icon: 'pi pi-home'},
+    { title: 'Reapertura', value: "0", icon: 'pi pi-user-edit' },
+    { title: 'Reapertura Padron', value: "1", icon: 'pi pi-home'},
   ]
   
 
@@ -71,14 +71,14 @@ export class CorteServicioComponent implements OnInit  {
     })
 
     this.cobranzaService.dropdownTipoEstServicio().subscribe((respuesta) => {
-      this._tipoEstServicio=respuesta.data.filter(x => x.idTipoEstServicio !== 1)
+      this._tipoEstServicio=respuesta.data.filter(x => x.idTipoEstServicio == 1)
     })
 
     this.cobranzaService.dropdownServices(1).subscribe((respuesta) => {
       this._servis=respuesta.data
     })
 
-    this.cobranzaService.dropdownTipoMotivoOperacion(1).subscribe((respuesta) => {
+    this.cobranzaService.dropdownTipoMotivoOperacion(2).subscribe((respuesta) => {
       this._tipoMotivOpe=respuesta.data
     })
 
@@ -91,6 +91,7 @@ export class CorteServicioComponent implements OnInit  {
     })
 
     this._gestionCorteModel.fechacorteDpl=this.funcionesService.devolverFecha(this.fechActual)
+    this._gestionCorteModel.idSucursal=this.idSedeTk
     
 
 
@@ -158,7 +159,7 @@ export class CorteServicioComponent implements OnInit  {
     this.cobranzaService.consultaCorteServicio(this._gestionCorteModel).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
-          this._listaCorte = data.data;
+          this._listaCorte =data.data.filter(x => x.idEstadoServicio !== 1);// data.data;
           hideGlobalLoader()
           //this.blockTable = 1;
         } else {
@@ -258,15 +259,17 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
 
 
   gestionar(){
+    this._gestionCorteModel.nroOrdenCore=null
+    this._gestionCorteModel.idMotivoOperacion=this._gestionCorteModel.idMotivoOperacionCab
+    this._gestionCorteModel.idService=this._gestionCorteModel.idServiceCab
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
-    
     this._gestionCorteModel.coreList=this._listadoCore
 
     //console.log(this._gestionCorteModel)
 
     showGlobalLoader()
 
-    this.cobranzaService.registraCore(this._gestionCorteModel).subscribe({
+    this.cobranzaService.registraReapertura(this._gestionCorteModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
           this.blockTable = 0;

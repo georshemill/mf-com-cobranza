@@ -543,7 +543,11 @@ export class CobranzaService {
         return this.http.post<ListResponse<Paramae>>(`https://gateway1.emapasalas.net.pe/Paramae/ConsultaTipo`,model);
     }
 
-    
+    //REAPERTURA
+
+    registraReapertura(model: GestionCorte): Observable<Mensaje> {
+        return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registraReapertura`, model);
+    }
 
    /* listarPersonas(campo:string,parametro:string): Observable<ListResponse<Personas[]>> {
         return this.http.get<ListResponse<Personas[]>>(`https://gateway8053.emapasalas.net.pe/CatastroClientes/GestionPersonas/ListPersona/${campo}/${parametro}`);

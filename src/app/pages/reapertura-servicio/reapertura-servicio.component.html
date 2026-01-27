@@ -3,8 +3,8 @@
         <div class="flex gap-3 align-items-center">
             <div class="text-4xl">🛠️</div>
             <div class="flex flex-col gap-1 text-600">
-                <div class="text-2xl font-semibold">CIERRE DE SERVICIO</div>
-                <div class="font-bold text-primary">Gestion de Cierre</div>
+                <div class="text-2xl font-semibold">REAPERTURA DE SERVICIO</div>
+                <div class="font-bold text-primary">Gestion de Reapertura</div>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
                                     <div class="col-span-12 md:col-span-12" >
                                         <p-floatlabel variant="on">
                                             <input pInputText  class="w-full" [(ngModel)]="_gestionCorteModel.propietario" (keydown.enter)="BuscarCliente()"
-                                            (input)="_gestionCorteModel.nroSuministro = null;_gestionCorteModel.propietario = (_gestionCorteModel.propietario || '').toUpperCase()"  />
+                                            (input)="_gestionCorteModel.nroSuministro = null;_gestionCorteModel.propietario = (_gestionCorteModel.propietario || '').toUpperCase()" />
                                             <label>Propietario</label>
                                         </p-floatlabel>
                                     </div>
@@ -83,7 +83,7 @@
                                     <div class="col-span-12 md:col-span-4 ">
                                         <p-floatlabel variant="on" >
                                             <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechacorteDpl" styleClass="w-full"/>
-                                            <label >Fecha Corte</label>
+                                            <label >Fecha Reapertura</label>
                                         </p-floatlabel>
                                     </div>
                                     <div class="col-span-12 md:col-span-4"  *ngIf="this._gestionCorteModel.idMotivoOperacionCab==2">
@@ -93,7 +93,7 @@
                                         </p-floatlabel>
                                     </div>
                                     <div class="col-span-12 md:col-span-3">
-                                        <button pButton pRipple icon="pi pi-search" (click)="gestionar()"  severity="info"  label="Guardar Corte" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                                        <button pButton pRipple icon="pi pi-search" (click)="gestionar()"  severity="info"  label="Guardar Reapertura" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
                                     </div>
                                 </div>
                             </p-fieldset>
@@ -121,7 +121,7 @@
                             </tr>
                         </ng-template>
                         <ng-template #body let-corte>
-                            <tr [style.backgroundColor]="corte.idEstadoServicio != 1 ? '#f8cb7d' : ''" >
+                            <tr  ><!--[style.backgroundColor]="corte.idEstadoServicio != 1 ? '#f8cb7d' : ''"-->
                                 <td class="text-center">  
                                     {{corte.idSector}}
                                 </td>
@@ -186,13 +186,14 @@
             <th class="text-center">Item</th>
             <th class="text-center">Suministro</th>
             <th class="text-center">Propietario</th>
-            <th class="text-center">Fecha de Corte</th>
             <th class="text-center">Insp</th>
+            <!--<th class="text-center">Fecha de Corte</th>
+            
             <th class="text-center">Tipo de Corte de Agua</th>
             <th class="text-center">CORE</th>
             <th class="text-center">Tipo de Corte Desagüe</th>
             <th class="text-center">CORE</th>
-            <th class="text-center">F. Límite Sol</th>
+            <th class="text-center">F. Límite Sol</th>-->
             <th class="text-center">Lectura Ultima</th>
             <th class="text-center">Observación</th>
             <th class="text-center">Inspector</th>
@@ -211,8 +212,8 @@
             <td class="text-center">{{core.nroSuministro}}</td>
             <td style="min-width: 200px" class="text-center">{{core.propietario}}</td>
 
-            <!-- Fecha de Corte con espacio suficiente -->
-            <td style="min-width: 200px">
+            <td class="text-center">{{core.idInspector}}</td>
+            <!--<td style="min-width: 200px">
                 <p-datepicker  
                     dateFormat="yy-mm-dd" 
                     [showIcon]="true" 
@@ -221,12 +222,8 @@
                     styleClass="w-full datepicker-full">
                 </p-datepicker>
             </td>
-
-            <td class="text-center">{{core.idInspector}}</td>
-
-            <!-- Tipo de Corte Agua -->
+            
             <td style="min-width: 200px">
-                
                     <p-select 
                         [options]="_tipoCorteAgu" 
                         optionLabel="descripcion" 
@@ -243,8 +240,6 @@
             <td class="text-center">
                 <p-checkbox [ngModel]="core.CoreAgua!= 1" [disabled]="true" binary="true"></p-checkbox>
             </td>
-
-            <!-- Tipo de Corte Desagüe -->
             <td style="min-width: 200px">
                     <p-select 
                         [options]="_tipoCorteAlca" 
@@ -258,12 +253,9 @@
                         appendTo="body">
                     </p-select> 
             </td>
-
             <td class="text-center">
                 <p-checkbox [ngModel]="core.coreAlca!= 1" [disabled]="true" binary="true"></p-checkbox>
             </td>
-
-            <!-- F. Límite Sol -->
             <td style="min-width: 200px">
                 <p-datepicker  
                     dateFormat="yy-mm-dd" 
@@ -272,7 +264,7 @@
                     [(ngModel)]="core.fechaLimiteSolicitud" 
                     styleClass="w-full datepicker-full">
                 </p-datepicker>
-            </td>
+            </td>-->
 
             <!-- Lectura Última -->
             <td style="min-width: 200px">

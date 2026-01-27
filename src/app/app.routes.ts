@@ -24,9 +24,9 @@ export const routes: Routes = [
           import('./pages/corte-servicio/corte-servicio.component').then((c) => c.CorteServicioComponent),
       },
       {
-        path: 'comercial/catastro/HorarioAbastecimiento',
+        path: 'comercial/cobranza/RegistReaperServ',
         loadComponent: () =>
-          import('./pages/catastro/horario-abastecimiento/horario-abastecimiento.component').then((c) => c.HorarioAbastecimientoComponent),
+          import('./pages/reapertura-servicio/reapertura-servicio.component').then((c) => c.ReaperturaServicioComponent),
       },
       /*{
         path: 'comercial/catastro/SolicitudConexion',

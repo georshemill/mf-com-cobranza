@@ -46,7 +46,10 @@ export class GestionCorte{
   usuarioCreacion:string | null = null;
   fechaLimiteDpl: string | null = null;
 
-
+  //PARA REAPERTURA
+  nroOrdenCore: number | null = null;
+  idMotivoOperacion: number | null = null;
+  idService: number | null = null;
 
 	//GUARDAR CORTE
 	/*idTipoOperacion: number | 1 = 1;
