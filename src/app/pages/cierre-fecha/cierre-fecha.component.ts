@@ -124,7 +124,7 @@ export class CierreFechaComponent implements OnInit{
       return;
     }
 
-    this._cierreModel.fecDesde=this.funcionesService.devolverFecha(this._cierreModel.fecHastaDpl)
+    this._cierreModel.fecDesde=this.funcionesService.devolverFecha(this._cierreModel.fecDesdeDpl)
     this._cierreModel.fecHasta=this.funcionesService.devolverFecha(this._cierreModel.fecHastaDpl)
     
 
