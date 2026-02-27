@@ -28,12 +28,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/reapertura-servicio/reapertura-servicio.component').then((c) => c.ReaperturaServicioComponent),
       },
-      /*{
-        path: 'comercial/catastro/SolicitudConexion',
+      {
+        
+        path: 'comercial/cobranza/CierresFecha',
         loadComponent: () =>
-          import('./pages/presupuesto/solicitud-conexion/solicitud-conexion.component').then((c) => c.SolicitudConexionComponent),
+          import('./pages/cierre-fecha/cierre-fecha.component').then((c) => c.CierreFechaComponent),
       },
-      */
+      
       {
         path: 'comercial/catastro/PanelBusqueda',
         loadComponent: () =>
