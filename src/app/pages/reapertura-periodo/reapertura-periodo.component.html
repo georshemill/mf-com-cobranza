@@ -1,0 +1,67 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">📊</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">REPORTE REAPERTURA POR FECHA</div>
+                <div class="font-bold text-primary">Gestion de Reapertura</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <fieldset class="border border-gray-300 rounded-lg p-5">
+            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+              Búsqueda Personalizada
+            </legend>
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on"> 
+                        <p-select [options]="_ciclo" optionLabel="descripcion" optionValue="idCiclo"  (onChange)="changeCiclo($event.value)" 
+                            filterBy="descripcion" [filter]="true" [(ngModel)]="_cierreModel.idCiclo"    class="w-full" appendTo="body"   ></p-select> 
+                        <label>Ciclo</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" filterBy="descripcion" [filter]="true"
+                                    class="w-full" appendTo="body"  [(ngModel)]="_cierreModel.idSucursal"  (onChange)="changeLocalidad($event.value)"    ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+                <!--<div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_sector" optionLabel="descripcion"  optionValue="idSector" filterBy="descripcion" [filter]="true"
+                                    [disabled]="localiBloque== null"   
+                                    class="w-full" appendTo="body"  [(ngModel)]="_cierreModel.idSector"  ></p-select> 
+                        <label>Sector</label>
+                    </p-floatlabel>
+                </div>-->
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_cierreModel.fecDesdeDpl" styleClass="w-full"/>
+                        <label >Fecha Inicio</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_cierreModel.fecHastaDpl" styleClass="w-full"/>
+                        <label >Fecha Fin</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <button pButton pRipple icon="pi pi-search"  severity="success" (click)="searchCierre()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+
+                <!--<div class="col-span-12 md:col-span-2 md:col-start-6" *ngIf="blockFiltro ==1" >
+                    <button pButton pRipple icon="pi pi-book"  severity="info" (click)="txtSunat()" label="Generar TXT" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>-->
+                
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<p-dialog  [(visible)]="displayPDF" modal="modal" showEffect="fade" [style]="{height:'1600px',width:'1550px'}">
+    <iframe width="100%" height="100%"   [src]="urlView |safe:'resourceUrl'"></iframe>
+</p-dialog>

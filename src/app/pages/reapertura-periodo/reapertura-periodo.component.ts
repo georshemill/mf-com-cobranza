@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { CobranzaService } from '../../services/Cobranza.service';
 import { ParametrosModule } from '../parametros.module';
+import { CobranzaService } from '../../services/Cobranza.service';
 import { GlobalSession } from '../utils/globalSession';
-import { Sector } from '../../models/Sector';
 import { Localidad } from '../../models/Localidad';
+import { Sector } from '../../models/Sector';
 import { Ciclo } from '../../models/Ciclo';
-import { FiltroCliente } from '../../models/FiltroCliente';
-import { ListResponse } from '../../responses/ListResponse';
+import { ReporteCierre } from '../../models/ReporteCierre';
 import { FuncionesService } from '../../services/funciones.service';
 import { MessageService } from 'primeng/api';
+import { ListResponse } from '../../responses/ListResponse';
 import { map } from 'rxjs/operators';
-import { ReporteCierre } from '../../models/ReporteCierre';
 
 @Component({
-  selector: 'app-cierre-fecha',
-  imports: [ParametrosModule],
-  templateUrl: './cierre-fecha.component.html',
-  styleUrl: './cierre-fecha.component.scss',
+  selector: 'app-reapertura-periodo',
+   imports: [ParametrosModule],
+  templateUrl: './reapertura-periodo.component.html',
+  styleUrl: './reapertura-periodo.component.scss',
   providers: [CobranzaService]
 })
-export class CierreFechaComponent implements OnInit{
+export class ReaperturaPeriodoComponent implements OnInit{
  
 
   idEmpresaTk = GlobalSession.idEmpresa;
@@ -37,18 +36,17 @@ export class CierreFechaComponent implements OnInit{
   urlImpresion: string=""
   displayPDF:boolean=false
 
-
   constructor(private facturacionService:CobranzaService,
-    private funcionesService:FuncionesService,
-    private messageService: MessageService) 
-  {     }
-
-  ngOnInit(): void {
+      private funcionesService:FuncionesService,
+      private messageService: MessageService) 
+    {     }
   
-    this.init()
-  }
+    ngOnInit(): void {
+    
+      this.init()
+    }
 
-  init(){
+init(){
 
     this.facturacionService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
       this.urlImpresion= data.data.valorParametro
@@ -127,9 +125,10 @@ export class CierreFechaComponent implements OnInit{
     this._cierreModel.fecDesde=this.funcionesService.devolverFecha(this._cierreModel.fecDesdeDpl)
     this._cierreModel.fecHasta=this.funcionesService.devolverFecha(this._cierreModel.fecHastaDpl)
     
-    
+    //http://apisistemas.ddns.net/comercialWEB/cobranza/ReaperturaXPeriodo.php?idempresa=1&idsede=2&idsucursal=2&idciclo=0&fechaini=2026-02-19&fechafin=2026-02-27
 
-    this.urlView=`${this.urlImpresion}/cobranza/CorteReaperturaXPeriodo.php?idempresa=1&idsede=${this.idSedeTk}&idsucursal=${this._cierreModel.idSucursal}&idciclo=${this._cierreModel.idCiclo}&fechaini=${this._cierreModel.fecDesde}&fechafin=${this._cierreModel.fecHasta}` ;
+    this.urlView=`${this.urlImpresion}/cobranza/ReaperturaXPeriodo.php?idempresa=1&idsede=${this.idSedeTk}&idsucursal=${this._cierreModel.idSucursal}&idciclo=${this._cierreModel.idCiclo}&fechaini=${this._cierreModel.fecDesde}&fechafin=${this._cierreModel.fecHasta}` ;
     this.displayPDF=true
   }
 }
+
