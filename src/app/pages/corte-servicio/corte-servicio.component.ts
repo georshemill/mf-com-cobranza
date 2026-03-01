@@ -271,6 +271,7 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
         if (respuesta.success==true) {
           this.blockTable = 0;
           hideGlobalLoader()
+          this._listadoCore=[]
           this.funcionesService.popupExito("Confirmacion","El Registro se Genero Correctamente");
           this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Padron Generado',life: 3000});
 
