@@ -288,7 +288,7 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
       },
       error: (err) => {
         hideGlobalLoader()
-        this.funcionesService.popupError("Error de Ejecucion", "Intente nuevamente");
+        this.funcionesService.popupError("Error de Ejecucion", err);
         this._listaCorte = [];
         this.blockTable=0
       }
