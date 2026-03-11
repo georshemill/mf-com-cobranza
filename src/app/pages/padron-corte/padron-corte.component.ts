@@ -17,6 +17,8 @@ import { ClienteCorte } from '../../models/ClienteCorte';
 import { GestionPadronCorte } from '../../models/GestionPadronCorte';
 import { GlobalSession } from '../utils/globalSession';
 import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
+import { ReporteCore } from '../../models/ReporteCore';
+import Swal from 'sweetalert2';
 
 
 
@@ -39,6 +41,7 @@ export class PadronCorteServicioComponent implements OnInit {
   idUsuarioTk = GlobalSession.idUsuario;
   
   _localidad:Localidad[] = []
+  _localidadReporte:Localidad[] = []
   _sector:Sector[] = []
   _ciclo:Ciclo[] = []
   _tipoServicio:TipoServicio[] = []
@@ -55,11 +58,24 @@ export class PadronCorteServicioComponent implements OnInit {
   _gestionCorteModel:GestionPadronCorte=new GestionPadronCorte
   _listaCorte:GestionPadronCorte[] = []
 
+  _reporteCoreModel:ReporteCore=new ReporteCore
+  _listaCore:ReporteCore[] = []
+
 
 
   localiBloque: number | null = null;
   blockTable:number=0
+  blockTableCore:number=0
   cicli!: string
+
+  _TipoOperacion:{ idTipoOperacion:number, descripcion:string }[] = [
+    {idTipoOperacion: 1, descripcion: 'CORTE'},
+    {idTipoOperacion: 2, descripcion: 'REAPERTURA'}]
+
+  tabs = [
+    { title: 'Gestion de Notificación', value: "0", icon: 'pi pi-user-edit' },
+    { title: 'Gestion de Reportes', value: "1", icon: 'pi pi-home'},
+  ]
 
 
 
@@ -99,6 +115,9 @@ export class PadronCorteServicioComponent implements OnInit {
       this.urlImpresion= data.data.valorParametro
     });
 
+    this.cobranzaService.dropdownLocalidadXsede(this.idSedeTk).subscribe((respuesta) => {
+      this._localidadReporte = respuesta.data;
+    });
 
     
 
@@ -230,6 +249,26 @@ export class PadronCorteServicioComponent implements OnInit {
           this.funcionesService.popupExitoCrud(mensajeAlert);
           this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Padron Generado',life: 3000});
 
+          Swal.fire({icon: 'success',
+                    title: mensajeAlert, 
+                    showDenyButton: true,
+                    confirmButtonText: "Aceptar",
+                    denyButtonColor: ' #607D8B',
+                    denyButtonText: `Imprimir`,
+                    confirmButtonColor: '#03A9F4',
+          }).then((result:any) => {
+            if (result.isConfirmed) {
+              // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+            //  this.inputSearch.input?.nativeElement.focus();
+            //  this.inputSearch.input?.nativeElement.select();
+            }
+            if (result.isDenied) {
+
+            this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${respuesta.dataId}`;
+            //this.urlView=`http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&idSede=${this.idSedeTk}&nroOrdenPago=${respuesta.dataId}` ;
+            this.displayPDF=true
+            }
+          });
          
         } else {
           hideGlobalLoader()
@@ -249,9 +288,79 @@ export class PadronCorteServicioComponent implements OnInit {
   }
 
 
-  viewPDF(){
+  searchReport(){
+
+    if ( this._reporteCoreModel.idSucursal==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Sede.", life: 3000
+      });
+      return;
+    }
+
+    if (!this._reporteCoreModel.nroOrdenCore && !this._reporteCoreModel.descripcion) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe ingresar Nro Orden Core o Descripción.",
+        life: 3000
+      });
+      return;
+    }
+
+    if ( this._reporteCoreModel.idTipoOperacion==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Tipo Operacion.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._reporteCoreModel.fechaDesdeDpl==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Fecha Inicio.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._reporteCoreModel.fechaHastaDpl==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Fecha Fin.", life: 3000
+      });
+      return;
+    }
+
+    showGlobalLoader()
+
+    this._reporteCoreModel.idEmpresa=this.idEmpresaTk
+    this._reporteCoreModel.idSede=this.idSedeTk
+    this._reporteCoreModel.fechaDesde=this.funcionesService.devolverFecha(this._reporteCoreModel.fechaDesdeDpl)
+    this._reporteCoreModel.fechaHasta=this.funcionesService.devolverFecha(this._reporteCoreModel.fechaHastaDpl)
     
-    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${this.impPadron}`;
+    this.cobranzaService.reporteCore(this._reporteCoreModel).subscribe({
+      next: (data) => {
+        if (data.data.length != 0) {
+          this._listaCore = data.data;
+          hideGlobalLoader()
+          this.blockTableCore = 1;
+        } else {
+          hideGlobalLoader()
+          this.funcionesService.popupError("Búsqueda sin información", "");
+          this._listaCorte = [];
+          this.blockTableCore=0
+        }
+      },
+      error: (err) => {
+        hideGlobalLoader()
+        this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+        this._listaCorte = [];
+        this.blockTableCore=0
+      }
+    });
+
+  }
+
+
+  viewPDF(){
+    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${this._listaCore[0].nroOrdenCore}`;
     this.displayPDF=true
   }
 

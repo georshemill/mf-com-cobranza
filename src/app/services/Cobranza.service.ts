@@ -83,6 +83,7 @@ import { GestionCorte } from '../models/GestionCorte';
 import { Inspector } from '../models/Inspector';
 import { TipoCorte } from '../models/TipoCorte';
 import { Paramae } from '../models/Paramae';
+import { ReporteCore } from '../models/ReporteCore';
 
 
 
@@ -529,6 +530,10 @@ export class CobranzaService {
         return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registrarPadronCore`, model);
     }
 
+    dropdownLocalidadXsede(idSede: number): Observable<ListResponse<Localidad[]>> {
+        return this.http.get<ListResponse<Localidad[]>>(`https://gateway1.emapasalas.net.pe/Localidad/dropdownxSede/${idSede}`);
+    }
+
     //CORTE DE SERVICIO
 
     consultaCorteServicio(model: GestionCorte): Observable<ListResponse<GestionCorte[]>> {
@@ -547,6 +552,10 @@ export class CobranzaService {
 
     registraReapertura(model: GestionCorte): Observable<Mensaje> {
         return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registraReapertura`, model);
+    }
+
+    reporteCore(model: ReporteCore): Observable<ListResponse<ReporteCore[]>> {
+        return this.http.post<ListResponse<ReporteCore[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ReportCorte`, model);
     }
 
    /* listarPersonas(campo:string,parametro:string): Observable<ListResponse<Personas[]>> {
