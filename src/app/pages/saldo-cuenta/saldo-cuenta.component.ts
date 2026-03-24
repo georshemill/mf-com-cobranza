@@ -151,7 +151,18 @@ this.urlView=`${this.urlImpresion}/saldos/SaldosPeriodoXClientePDF.php?idempresa
 this.displayPDF=true
 }
 
+viewResumen(){
+  this.urlView=`${this.urlImpresion}/cobranza/saldosXPeriodo.php?IdEmpresa=1&IdSede=${this.idSedeTk}&IdCiclo=${this._facMensualModel.idCiclo}&IdSucursal=${this._facMensualModel.idSucursal}&Anio=${this._facMensualModel.anio}&Mes=${this._facMensualModel.mes}&Tipo=0` ;
+  this.displayPDF=true
+}
 
+viewExcel(){
+  const url=`${this.urlImpresion}/saldos/SaldosPeriodoXCliente.php?idempresa=1&idsede=${this.idSedeTk}&anio=${this._facMensualModel.anio}&mes=${this._facMensualModel.mes}&idciclo=${this._facMensualModel.idCiclo}&idsucursal=${this._facMensualModel.idSucursal}` ;
+   
+  const link = document.createElement('a');
+  link.href = url;
+  link.click();
+}
 
 
 
