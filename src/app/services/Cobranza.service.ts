@@ -84,6 +84,8 @@ import { Inspector } from '../models/Inspector';
 import { TipoCorte } from '../models/TipoCorte';
 import { Paramae } from '../models/Paramae';
 import { ReporteCore } from '../models/ReporteCore';
+import { Calendario } from '../models/Calendario';
+import { SaldoCuenta } from '../models/SaldoCuenta';
 
 
 
@@ -558,11 +560,17 @@ export class CobranzaService {
         return this.http.post<ListResponse<ReporteCore[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ReportCorte`, model);
     }
 
-   /* listarPersonas(campo:string,parametro:string): Observable<ListResponse<Personas[]>> {
-        return this.http.get<ListResponse<Personas[]>>(`https://gateway8053.emapasalas.net.pe/CatastroClientes/GestionPersonas/ListPersona/${campo}/${parametro}`);
+    dropdownAnio(idCiclo: number): Observable<ListResponse<Calendario[]>> { 
+        return this.http.get<ListResponse<Calendario[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdownAnioXciclo/${idCiclo}`);
     }
-    */
 
+    dropdownMes(idCiclo: number,anio:number): Observable<ListResponse<Calendario[]>> { 
+        return this.http.get<ListResponse<Calendario[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdownMesXciclo/${idCiclo}/${anio}`);
+    }
+
+    searchResumenSaldoXCobr(model: SaldoCuenta): Observable<ListResponse<SaldoCuenta[]>> { 
+        return this.http.post<ListResponse<SaldoCuenta[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ReportFacturacionXPeriodo`,model);
+    }
 
     
 

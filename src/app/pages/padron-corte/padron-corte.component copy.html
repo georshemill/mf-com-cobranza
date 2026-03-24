@@ -119,7 +119,7 @@
                         <div class="grid grid-cols-12 gap-4 ">
                             <div  class="col-span-12 md:col-span-3" >
                                 <p-fieldset legend="Seleccion Registros">
-                                    <!--<div class="grid grid-cols-12 gap-4 ">
+                                    <div class="grid grid-cols-12 gap-4 ">
                                         <div class="col-span-12 md:col-span-6" >
                                             <p-floatlabel variant="on">
                                                 <input pInputText  class="w-full" type="number"  [max]="99999"  [(ngModel)]="_gestionCorteModel.importeInicial"  />
@@ -131,30 +131,6 @@
                                                 <input pInputText  class="w-full" type="number"    [max]="99999"  [(ngModel)]="_gestionCorteModel.importeFinal" />
                                                 <label>Hasta</label>
                                             </p-floatlabel>
-                                        </div>
-                                    </div>-->
-
-                                    <div  class="col-md-6 mt-2">
-                                        <div  class="m-1 flex align-items-center">
-                                            <!--<strong  class="text-end mr-2 fs-5" style="width: 150px;">Total Registros:</strong> posicion derecha-->
-                                            <strong  class="text-end mr-2 fs-5" >Total Registros:</strong>
-                                            <p class="text-end fs-4"> {{ _listaCorte.length }} </p>
-                                        </div>
-                                        <div class="m-1 flex align-items-center">
-                                            <strong  class="text-end mr-2 fs-5">Seleccionados:</strong>
-                                            <p class="text-end fs-4" style="color: red;"> {{ selectedCount }}</p>
-                                        </div>
-                                        <div class="m-1 flex align-items-center justify-content-sm-around">
-                                            <strong class="text-end mr-2 fs-6" >Importe Mes:</strong>
-                                            <p  class="text-end fs-5">S/ 0.00</p>
-                                        </div>
-                                        <div class="m-1 flex align-items-center justify-content-sm-around">
-                                            <strong class="text-end mr-2 fs-6" >Importe Refinanciado: </strong>
-                                            <p class="text-end fs-5">S/ 0.00</p>
-                                        </div>
-                                        <div class="m-1 flex align-items-center justify-content-sm-around">
-                                            <strong class="text-end mr-2 fs-6" >Importe Total:</strong>
-                                            <p  class="text-end fs-5"> S/ 0.00 </p>
                                         </div>
                                     </div>
                                 </p-fieldset>
@@ -203,97 +179,93 @@
                         </div>
                     </p-fieldset>
                     <br>
-                    <!-- Barra de estado -->
-                    <div class="flex align-items-center gap-3 mb-2 p-2 surface-100 border-round" *ngIf="blockTable == 1">
-                        <span class="text-sm text-500">
-                        <i class="pi pi-info-circle mr-1"></i>
-                        <strong>Shift+Click</strong> Para Seleccionar Rango
-                        </span>
-                        <!--<p-button label="Seleccionar todo" icon="pi pi-check-square" size="small"
-                                severity="secondary" (onClick)="selectAll()" />
-                        <p-button label="Limpiar selección" icon="pi pi-times" size="small"
-                                severity="danger" (onClick)="clearSelection()" />
-                        <span class="ml-auto font-semibold text-primary">
-                        {{ selectedCount }} de {{ _listaCorte.length }} seleccionado(s)
-                        </span>-->
-                    </div>
-  
-  <p-table
-    #dt
-    [value]="_listaCorte"
-    scrollable="true"
-    resizableColumns="true"
-    scrollHeight="500px"
-    size="small"
-    dataKey="nroSuministro"
-    *ngIf="blockTable == 1">
-  
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="text-center" style="width: 3rem">
-          <p-checkbox
-            [(ngModel)]="allSelectedModel"
-            [binary]="true"
-            (ngModelChange)="onHeaderCheckboxChange($event)" />
-        </th>
-        <th class="text-center">Ítem</th>
-        <th class="text-center">Ciclo</th>
-        <th class="text-center">Loc</th>
-        <th class="text-center">Sec</th>
-        <th class="text-center">Mza</th>
-        <th class="text-center">Lote</th>
-        <th class="text-center">Slote</th>
-        <th class="text-center">Ruta</th>
-        <th class="text-center">Orden</th>
-        <th class="text-center">TS</th>
-        <th class="text-center">ES</th>
-        <th class="text-center">Suministro</th>
-        <th class="text-center">Medidor</th>
-        <th class="text-center">Propietario</th>
-        <th class="text-center">Direccion</th>
-        <th class="text-center">NroCalle</th>
-        <th class="text-center">Meses</th>
-        <th class="text-center">M. Fracc</th>
-        <th class="text-center">Deuda</th>
-      </tr>
-    </ng-template>
-  
-    <ng-template #body let-corte let-rowIndex="rowIndex">
-      <tr
-        [style.background-color]="isSelected(rowIndex) ? '#dbeafe' : ''"
-        [style.cursor]="'pointer'"
-        [style.user-select]="'none'"
-        (click)="onRowClick(corte, rowIndex, $event)">
-  
-        <td class="text-center">
-          <p-checkbox
-            [(ngModel)]="selectedItems[rowIndex]"
-            [binary]="true"
-            (click)="$event.stopPropagation(); toggleItem(rowIndex)" />
-        </td>
-        <td class="text-center">{{corte.item}}</td>
-        <td class="text-center">{{corte.idCiclo}}</td>
-        <td class="text-center">{{corte.idSucursal}}</td>
-        <td class="text-center">{{corte.idSector}}</td>
-        <td class="text-center">{{corte.idManzana}}</td>
-        <td class="text-center">{{corte.nroLote}}</td>
-        <td class="text-center">{{corte.nroSubLote}}</td>
-        <td class="text-center">{{corte.idRutaReparto}}</td>
-        <td class="text-center">{{corte.ordenRutaReparto}}</td>
-        <td class="text-center">{{corte.tipoServicio}}</td>
-        <td class="text-center">{{corte.estadoServicio}}</td>
-        <td class="text-center">{{corte.nroSuministro}}</td>
-        <td class="text-center">{{corte.nroMedidor}}</td>
-        <td class="text-center">{{corte.propietario}}</td>
-        <td class="text-center">{{corte.direccion2}}</td>
-        <td class="text-center">{{corte.nroCalle}}</td>
-        <td class="text-center">{{corte.nroMesesDeuda}}</td>
-        <td class="text-center">{{corte.nroMesesFraccionamiento}}</td>
-        <td class="text-center">{{corte.deudaCobrable}}</td>
-      </tr>
-    </ng-template>
-  
-  </p-table>
+                    <p-table  #dt [value]="_listaCorte" scrollable="true" resizableColumns="true" scrollHeight="500px"
+                                  size="small" *ngIf="blockTable == 1">
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center">Ítem</th>
+                                    <th class="text-center">Ciclo</th>
+                                    <th class="text-center">Loc</th>
+                                    <th class="text-center">Sec</th>
+                                    <th class="text-center">Mza</th>
+                                    <th class="text-center">Lote</th>
+                                    <th class="text-center">Slote</th>
+                                    <th class="text-center">Ruta</th>
+                                    <th class="text-center">Orden</th>
+                                    <th class="text-center">TS</th>
+                                    <th class="text-center">ES</th>
+                                    <th class="text-center">Suministro</th>
+                                    <th class="text-center">Medidor</th>
+                                    <th class="text-center">Propietario</th>
+                                    <th class="text-center">Direccion</th>
+                                    <th class="text-center">NroCalle</th>
+                                    <th class="text-center">Meses</th>
+                                    <th class="text-center">M. Fracc</th>
+                                    <th class="text-center" >Deuda</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-corte>
+                                <tr >
+                                    <td class="text-center">  
+                                        {{corte.item}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.idCiclo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.idSucursal}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.idSector}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.idManzana}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroLote}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroSubLote}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.idRutaReparto}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.ordenRutaReparto}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.tipoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.estadoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroSuministro}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroMedidor}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.propietario}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.direccion2}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroCalle}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroMesesDeuda}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.nroMesesFraccionamiento}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{corte.deudaCobrable}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                    </p-table>
                 </p-tabpanel>
                 <p-tabpanel value="1" >
                     <div class="card overflow-x-auto">

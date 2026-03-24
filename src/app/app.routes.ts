@@ -40,12 +40,19 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/reapertura-periodo/reapertura-periodo.component').then((c) => c.ReaperturaPeriodoComponent),
       },
-      
+      {
+        path: 'comercial/cobranza/saldCuentCobr',
+        loadComponent: () =>
+          import('./pages/saldo-cuenta/saldo-cuenta.component').then((c) => c.SaldoCuentaComponent),
+      },
       {
         path: 'comercial/catastro/PanelBusqueda',
         loadComponent: () =>
           import('./shared/panel-busqueda/panel-busqueda.component').then((c) => c.PanelBusquedaComponent),
       },
+      
+      
+
       
 
       

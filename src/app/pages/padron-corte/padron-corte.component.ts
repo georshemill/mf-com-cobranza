@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CobranzaService } from '../../services/Cobranza.service';
 import { ParametrosModule } from '../parametros.module';
 import { FuncionesService } from '../../services/funciones.service';
@@ -72,6 +72,8 @@ export class PadronCorteServicioComponent implements OnInit {
     {idTipoOperacion: 1, descripcion: 'CORTE'},
     {idTipoOperacion: 2, descripcion: 'REAPERTURA'}]
 
+    
+
   tabs = [
     { title: 'Gestion de Notificación', value: "0", icon: 'pi pi-user-edit' },
     { title: 'Gestion de Reportes', value: "1", icon: 'pi pi-home'},
@@ -79,13 +81,16 @@ export class PadronCorteServicioComponent implements OnInit {
 
 
 
+
   constructor(private cobranzaService:CobranzaService,
               private funcionesService:FuncionesService,
-              private messageService: MessageService) 
+              private messageService: MessageService,
+              private cdr: ChangeDetectorRef) 
       {     }
 
   ngOnInit(): void {
     this.init()
+    
   }
 
 
@@ -186,6 +191,7 @@ export class PadronCorteServicioComponent implements OnInit {
       next: (data) => {
         if (data.data.length != 0) {
           this._listaCorte = data.data;
+          this.initSelection(); 
           this.blockTable = 1;
           hideGlobalLoader()
         } else {
@@ -358,6 +364,71 @@ export class PadronCorteServicioComponent implements OnInit {
 
   }
 
+  selectedItems: boolean[] = [];
+  lastClickedIndex: number | null = null;
+  allSelectedModel: boolean = false;
+  
+  initSelection() {
+    this.selectedItems = new Array(this._listaCorte.length).fill(false);
+    this.allSelectedModel = false;
+  }
+  
+  onRowClick(corte: any, index: number, event: MouseEvent) {
+    // evitar que un click en el checkbox dispare esto también
+    const target = event.target as HTMLElement;
+    if (target.closest('.p-checkbox')) return;
+  
+    if (event.shiftKey && this.lastClickedIndex !== null) {
+      const min = Math.min(this.lastClickedIndex, index);
+      const max = Math.max(this.lastClickedIndex, index);
+      for (let i = min; i <= max; i++) {
+        this.selectedItems[i] = true;
+      }
+    } else {
+      this.selectedItems[index] = !this.selectedItems[index];
+      this.lastClickedIndex = index;
+    }
+    this.selectedItems = [...this.selectedItems];
+    this.allSelectedModel = this.selectedItems.length > 0 && this.selectedItems.every(Boolean);
+    this.cdr.detectChanges();
+  }
+  
+  toggleItem(index: number) {
+    this.selectedItems[index] = !this.selectedItems[index];
+    this.selectedItems = [...this.selectedItems];
+    this.lastClickedIndex = index;
+    this.allSelectedModel = this.selectedItems.length > 0 && this.selectedItems.every(Boolean);
+    this.cdr.detectChanges();
+  }
+  
+  onHeaderCheckboxChange(checked: boolean) {
+    checked ? this.selectAll() : this.clearSelection();
+  }
+  
+  isSelected(index: number): boolean {
+    return !!this.selectedItems[index];
+  }
+  
+  get selectedCount(): number {
+    return this.selectedItems.filter(Boolean).length;
+  }
+  
+  selectAll() {
+    this.selectedItems = new Array(this._listaCorte.length).fill(true);
+    this.allSelectedModel = true;
+    this.cdr.detectChanges();
+  }
+  
+  clearSelection() {
+    this.selectedItems = new Array(this._listaCorte.length).fill(false);
+    this.lastClickedIndex = null;
+    this.allSelectedModel = false;
+    this.cdr.detectChanges();
+  }
+  
+  getSelectedRows() {
+    return this._listaCorte.filter((_, i) => this.selectedItems[i]);
+  }
 
   viewPDF(){
     this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${this._listaCore[0].nroOrdenCore}`;

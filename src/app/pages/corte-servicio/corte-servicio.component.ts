@@ -98,7 +98,7 @@ export class CorteServicioComponent implements OnInit  {
 
   changeService(x:any){
 
-    this.cobranzaService.dropdownInspector(1,x.idService,"CORE").subscribe((respuesta) => {
+    this.cobranzaService.dropdownInspector(this.idSedeTk,x.idService,"CORE").subscribe((respuesta) => {
       this._inspector=respuesta.data
     })
 
