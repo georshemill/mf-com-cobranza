@@ -70,8 +70,12 @@ export class VentaPeriodoComponent {
               this._localidad = data;
             });
     
-        this.cobranzaService.dropdownCiclo(this.idSedeTk).subscribe((respuesta) => {
-          this._ciclo = respuesta.data;
+        this.cobranzaService.dropdownCiclo(this.idSedeTk).pipe(
+          map((resp: ListResponse<Ciclo[]>) => [
+              {idSucursal: 0,idCiclo:0, descripcion: 'TODOS',sucursal:'',idSectorOperacional:0,sectorOperacional:''},
+              ...(resp.data ?? [])  ])
+          ).subscribe((data: Ciclo[]) => {
+          this._ciclo = data;
         });
     
         this.cobranzaService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
