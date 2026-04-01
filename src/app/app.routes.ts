@@ -46,16 +46,26 @@ export const routes: Routes = [
           import('./pages/saldo-cuenta/saldo-cuenta.component').then((c) => c.SaldoCuentaComponent),
       },
       {
+        path: 'comercial/cobranza/VentaConcepto',
+        loadComponent: () =>
+          import('./pages/reportes/venta-concepto/venta-concepto.component').then((c) => c.VentaConceptoComponent),
+      },
+      {
+        path: 'comercial/cobranza/VentaPeriodo',
+        loadComponent: () =>
+          import('./pages/reportes/venta-periodo/venta-periodo.component').then((c) => c.VentaPeriodoComponent),
+      },
+
+
+
+      
+      
+
+      {
         path: 'comercial/catastro/PanelBusqueda',
         loadComponent: () =>
           import('./shared/panel-busqueda/panel-busqueda.component').then((c) => c.PanelBusquedaComponent),
       },
-      
-      
-
-      
-
-      
       {
         path: 'comercial/cobranza/notfound',
         loadComponent: () =>
