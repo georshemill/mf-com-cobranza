@@ -36,10 +36,16 @@ export const routes: Routes = [
       },
       {
         
-        path: 'comercial/cobranza/ReaperturaFecha',
+      path: 'comercial/cobranza/ReaperturaFecha',
         loadComponent: () =>
           import('./pages/reapertura-periodo/reapertura-periodo.component').then((c) => c.ReaperturaPeriodoComponent),
       },
+      {
+      path: 'comercial/cobranza/PadronReapertura',
+        loadComponent: () =>
+          import('./pages/padron-reapertura/padron-reapertura.component').then((c) => c.PadronReaperturaServicioComponent),
+      },
+
       {
         path: 'comercial/cobranza/saldCuentCobr',
         loadComponent: () =>

@@ -536,6 +536,10 @@ export class CobranzaService {
         return this.http.get<ListResponse<Localidad[]>>(`https://gateway1.emapasalas.net.pe/Localidad/dropdownxSede/${idSede}`);
     }
 
+    consultaListaReap(model: GestionPadronCorte): Observable<ListResponse<GestionPadronCorte[]>> {
+        return this.http.post<ListResponse<GestionPadronCorte[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ReportReapertura`, model);
+    }
+
     //CORTE DE SERVICIO
 
     consultaCorteServicio(model: GestionCorte): Observable<ListResponse<GestionCorte[]>> {
