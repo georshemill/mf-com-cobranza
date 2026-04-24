@@ -166,7 +166,7 @@ export class PadronReaperturaServicioComponent implements OnInit {
     if(x.idSucursal==0){
       this.localiBloque=null
     }else{
-      this.localiBloque=1
+      this.localiBloque=this.idSedeTk
     }
 
     this._gestionCorteModel.idSucursal=x.idSucursal
