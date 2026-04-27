@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="col-span-12 md:col-span-6" >
                                         <p-floatlabel variant="on">
-                                            <input pInputText  class="w-full" [(ngModel)]="_gestionCorteModel.nroSuministro"  (keydown.enter)="BuscarCliente()" 
+                                            <p-inputnumber  class="w-full" [(ngModel)]="_gestionCorteModel.nroSuministro"  (keydown.enter)="BuscarCliente()" 
                                                 (input)="_gestionCorteModel.propietario= null;"/>
                                             <label>Suministro</label>
                                         </p-floatlabel>
@@ -52,13 +52,13 @@
                         <div  class="col-span-12 md:col-span-6" >
                             <p-fieldset legend="Parametro de Operacion Cierre">
                                 <div class="grid grid-cols-12 gap-4 ">
-                                    <div  class="col-span-12 md:col-span-6" >
+                                    <!--<div  class="col-span-12 md:col-span-6" >
                                         <p-floatlabel variant="on">
                                             <p-select [options]="_tipoEstServicio" optionLabel="descripcion" (onChange)="changeEstado($event.value)"  
                                                 filterBy="descripcion" [filter]="true"  class="w-full" appendTo="body"   ></p-select> 
                                             <label>Estado Servicio</label>
                                         </p-floatlabel>
-                                    </div>
+                                    </div>-->
                                     <div  class="col-span-12 md:col-span-6" >
                                         <p-floatlabel variant="on"> <!--optionValue="idTipoMotivoOperacion" -->
                                             <p-select [options]="_tipoMotivOpe" optionLabel="descripcion"  (onChange)="changeOperacion($event.value)"
@@ -92,9 +92,9 @@
                                             <label >Fecha Limite Solicitud</label>
                                         </p-floatlabel>
                                     </div>
-                                    <div class="col-span-12 md:col-span-3">
+                                    <!--<div class="col-span-12 md:col-span-3">
                                         <button pButton pRipple icon="pi pi-search" (click)="gestionar()"  severity="info"  label="Guardar Corte" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </p-fieldset>
                         </div>
@@ -241,7 +241,7 @@
             </td>
 
             <td class="text-center">
-                <p-checkbox [ngModel]="core.CoreAgua!= 1" [disabled]="true" binary="true"></p-checkbox>
+                <p-checkbox [ngModel]="core.CoreAgua== 1" [disabled]="true" binary="true"></p-checkbox>
             </td>
 
             <!-- Tipo de Corte Desagüe -->
@@ -260,7 +260,7 @@
             </td>
 
             <td class="text-center">
-                <p-checkbox [ngModel]="core.coreAlca!= 1" [disabled]="true" binary="true"></p-checkbox>
+                <p-checkbox [ngModel]="core.coreAlca== 1" [disabled]="true" binary="true"></p-checkbox>
             </td>
 
             <!-- F. Límite Sol -->
@@ -277,7 +277,7 @@
             <!-- Lectura Última -->
             <td style="min-width: 200px">
                 <p-floatlabel variant="on">
-                    <input pInputText [(ngModel)]="core.lecturaCampo"  class="w-full"/>
+                    <p-inputnumber [(ngModel)]="core.lecturaCampo"  class="w-full"/>
                 </p-floatlabel>
             </td>
 
@@ -310,8 +310,19 @@
                                     </td>-->
 
 
-                    													
+                                    <br>
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button pButton pRipple 
+                                            icon="pi pi-search" 
+                                            (click)="gestionar()"  
+                                            severity="info"  
+                                            label="Guardar Corte" 
+                                            iconPos="right" 
+                                            class="p-button-warning mr-2">
+                                        </button>
+                                    </div>								
                 </p-tabpanel>
+                
                 <p-tabpanel value="1" >
                     das
                 </p-tabpanel>

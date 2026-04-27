@@ -13,6 +13,7 @@ import { DetallePadronCorte } from '../../models/DetallePadronCorte';
 import { TipoCorte } from '../../models/TipoCorte';
 import { GlobalSession } from '../utils/globalSession';
 import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-corte-servicio',
@@ -66,7 +67,7 @@ export class CorteServicioComponent implements OnInit  {
 
   init(){
     
-    this.cobranzaService.dropdownLocalidad().subscribe((respuesta) => {
+    this.cobranzaService.dropdownLocalidadXsede(this.idSedeTk).subscribe((respuesta) => {
       this._localidad=respuesta.data
     })
 
@@ -107,9 +108,9 @@ export class CorteServicioComponent implements OnInit  {
 
   }
 
-  changeEstado(x:any){
+  /*changeEstado(x:any){
     this._gestionCorteModel.idTipoEstServicioCab=x.idTipoEstServicio
-  }
+  }*/
 
   changeOperacion(x:any){
     //console.log(x)
@@ -185,10 +186,10 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
   onRowSelect(x:any){
    //console.log(x)
 
-    if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
+    /*if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Estado de Servicio");
     return;
-    }
+    }*/
 
     if( this._gestionCorteModel.idMotivoOperacionCab==undefined || this._gestionCorteModel.idMotivoOperacionCab==null || this._gestionCorteModel.idMotivoOperacionCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");
@@ -205,6 +206,22 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     return;
     }
 
+    if( this._gestionCorteModel.codInspectorCabecera==undefined || this._gestionCorteModel.codInspectorCabecera==null || this._gestionCorteModel.codInspectorCabecera==0  ){
+      this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Inspector");
+    return;
+    }
+
+    if ( this._gestionCorteModel.codInspectorCabecera ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Inspector.", life: 3000
+      });
+      return;
+    }
+
+
+    
+
+    
 
     let core =new DetallePadronCorte
 
@@ -233,12 +250,53 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     core.nombreMes=x.nombreMes
     core.idService=this._gestionCorteModel.idServiceCab
     core.fechaLimiteSolicitud=this._gestionCorteModel.fechaLimiteDpl
+    core.deudaCobrable=x.deudaCobrable
 
 
 
     this._listadoCore = this._listadoCore ?? [];
     this._listadoCore.push(core)
     this._listaCorte = this._listaCorte.filter((f) => f.nroSuministro !== x.nroSuministro);
+
+
+
+    const existe = this._listaCorte?.some(item => !!item.fechaCorte);
+
+    if (existe) {
+      this.funcionesService.popupError("Aviso de Usuario","Ya Existe FechaCorte");
+      return;
+    }
+
+    /*  const ultimoItem = this._listadoCore?.at(-1);
+
+if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
+  this.funcionesService.popupError(
+    "Aviso de Usuario",
+    "El usuario no tiene deuda desea cargar para corte"
+  );
+  return;
+}*/
+
+const ultimoItem = this._listadoCore?.at(-1);
+
+if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
+
+  const result =Swal.fire({
+    title: 'Aviso de Usuario',
+    text: 'El usuario no tiene deuda ¿desea cargar para corte?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (!result.isConfirmed) {
+      this._listadoCore.pop();
+    }
+  });
+
+}
+     
+console.log("existeDeuda:", ultimoItem);
 
   }
 
@@ -258,10 +316,55 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
 
 
   gestionar(){
+
+    if ( this._gestionCorteModel.idMotivoOperacionCab ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Motivo Operacion.", life: 3000
+      });
+      return;
+    }
+    
+    if ( this._gestionCorteModel.idServiceCab ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Servicio.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.codInspectorCabecera ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Inspector.", life: 3000
+      });
+      return;
+    }
+
+
+  
+
+    //const fechaCorte = new Date(this._gestionCorteModel.fechaCorte);
+
+
+
+
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
     
     this._gestionCorteModel.coreList=this._listadoCore
 
+
+    const hayFechasInvalidas = this._gestionCorteModel.coreList?.some(item => {
+      //const fechaItem = item.fechaLimite);
+      return item.fechaLimite! < item.fechaCorte!;
+    });
+    
+    if (hayFechasInvalidas) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "No se permiten fechas anteriores a la fecha de corte.",
+        life: 3000
+      });
+      return;
+    }
     //console.log(this._gestionCorteModel)
 
     showGlobalLoader()
