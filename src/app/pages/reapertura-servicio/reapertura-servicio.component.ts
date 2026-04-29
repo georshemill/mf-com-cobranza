@@ -13,6 +13,7 @@ import { DetallePadronCorte } from '../../models/DetallePadronCorte';
 import { TipoCorte } from '../../models/TipoCorte';
 import { GlobalSession } from '../utils/globalSession';
 import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reapertura-servicio',
@@ -66,7 +67,7 @@ export class ReaperturaServicioComponent implements OnInit  {
 
   init(){
     
-    this.cobranzaService.dropdownLocalidad().subscribe((respuesta) => {
+    this.cobranzaService.dropdownLocalidadXsede(this.idSedeTk).subscribe((respuesta) => {
       this._localidad=respuesta.data
     })
 
@@ -99,7 +100,7 @@ export class ReaperturaServicioComponent implements OnInit  {
 
   changeService(x:any){
 
-    this.cobranzaService.dropdownInspector(1,x.idService,"CORE").subscribe((respuesta) => {
+    this.cobranzaService.dropdownInspector(this.idSedeTk,x.idService,"CORE").subscribe((respuesta) => {
       this._inspector=respuesta.data
     })
 
@@ -141,6 +142,15 @@ export class ReaperturaServicioComponent implements OnInit  {
 
     this._gestionCorteModel.codInspectorCabecera=x.idInspector
     this._gestionCorteModel.inspectorCabecera=x.nombres
+  }
+
+  onSuministroChange(value: number | null) {
+    this._gestionCorteModel.propietario = null;
+  
+    // opcional: si quieres asegurar limpieza
+    if (!value) {
+      this._gestionCorteModel.nroSuministro = null;
+    }
   }
 
 
@@ -186,11 +196,74 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
   onRowSelect(x:any){
    //console.log(x)
 
-    if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
+    /*if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Estado de Servicio");
     return;
+    }*/
+
+
+      if (!this._gestionCorteModel.idMotivoOperacionCab) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");
+        return;
+      }
+    
+      if (!this._gestionCorteModel.idServiceCab) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Servis");
+        return;
+      }
+    
+      if (!this._gestionCorteModel.codInspectorCabecera) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Inspector");
+        return;
+      }
+    
+      const duplicado = this._listadoCore?.some(f => f.nroSuministro === x.nroSuministro);
+      if (duplicado) {
+        this.messageService.add({
+          severity: "warn",
+          summary: "Aviso de usuario",
+          detail: "El Registro ya se encuentra Asignado",
+          life: 3000
+        });
+        return;
+      }
+    
+      let core = new DetallePadronCorte();
+    
+      core.propietario = x.propietario;
+      core.nroSuministro = x.nroSuministro;
+      core.idInspector = this._gestionCorteModel.codInspectorCabecera;
+      core.deudaCobrable = x.deudaCobrable;
+    
+      // (completa lo demás igual que ya lo haces)
+    
+      const ejecutar = () => {
+        this._listadoCore = [...(this._listadoCore || []), core];
+        this._listaCorte = this._listaCorte.filter(f => f.nroSuministro !== x.nroSuministro);
+      };
+    
+      if (Number(x.deudaCobrable) !== 0) {
+    
+        Swal.fire({
+          title: 'Aviso de Usuario',
+          text: 'El usuario tiene deuda pendiente de pago ¿desea cargar para Reapertura?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'
+        }).then(result => {
+          if (result.isConfirmed) {
+            ejecutar(); // 👈 recién aquí modificas todo
+          }
+        });
+    
+      } else {
+        ejecutar();
+      }
     }
 
+    /*ONROW ANTIGUO
+    
     if( this._gestionCorteModel.idMotivoOperacionCab==undefined || this._gestionCorteModel.idMotivoOperacionCab==null || this._gestionCorteModel.idMotivoOperacionCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");
     return;
@@ -234,6 +307,7 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     core.nombreMes=x.nombreMes
     core.idService=this._gestionCorteModel.idServiceCab
     core.fechaLimiteSolicitud=this._gestionCorteModel.fechaLimiteDpl
+    core.deudaCobrable=x.deudaCobrable
 
 
 
@@ -241,7 +315,54 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     this._listadoCore.push(core)
     this._listaCorte = this._listaCorte.filter((f) => f.nroSuministro !== x.nroSuministro);
 
-  }
+
+    /*const ultimoItem = this._listadoCore?.at(-1);
+    
+    if (ultimoItem && Number(ultimoItem.deudaCobrable) != 0) {
+    
+      const result =Swal.fire({
+        title: 'Aviso de Usuario',
+        text: 'El usuario tiene deuda pendiente de pago ¿desea cargar para Reapertura?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (!result.isConfirmed) {
+          this._listadoCore.pop();
+        }
+      });
+    
+    }
+
+      const ultimoItem = this._listadoCore?.at(-1);
+
+      if (ultimoItem && Number(ultimoItem.deudaCobrable) != 0) {
+
+        Swal.fire({
+          title: 'Aviso de Usuario',
+          text: 'El usuario tiene deuda pendiente de pago ¿desea cargar para Reapertura?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'
+        }).then(result => {
+    
+          if (result.isConfirmed) {
+            this._listadoCore.push(x); // 👈 recién aquí agregas
+          }
+    
+        });
+    
+      } else {
+        this._listadoCore.push(x);
+      }
+
+    
+    */
+    
+
+  
 
   /*eliminarDeSeleccionados(facturacion: any) {
     this.mesesSeleccionados = this.mesesSeleccionados.filter(
@@ -259,6 +380,27 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
 
 
   gestionar(){
+    if ( this._gestionCorteModel.idMotivoOperacionCab ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Motivo Operacion.", life: 3000
+      });
+      return;
+    }
+    
+    if ( this._gestionCorteModel.idServiceCab ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Servicio.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.codInspectorCabecera ==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Ingresar Inspector.", life: 3000
+      });
+      return;
+    }
+    
     this._gestionCorteModel.nroOrdenCore=null
     this._gestionCorteModel.idMotivoOperacion=this._gestionCorteModel.idMotivoOperacionCab
     this._gestionCorteModel.idService=this._gestionCorteModel.idServiceCab

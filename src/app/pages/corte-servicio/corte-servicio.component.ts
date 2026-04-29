@@ -144,6 +144,16 @@ export class CorteServicioComponent implements OnInit  {
   }
 
 
+  onSuministroChange(value: number | null) {
+    this._gestionCorteModel.propietario = null;
+  
+    // opcional: si quieres asegurar limpieza
+    if (!value) {
+      this._gestionCorteModel.nroSuministro = null;
+    }
+  }
+
+
   BuscarCliente(){
 
     if( !this._gestionCorteModel.nroSuministro?.toString().trim() && !this._gestionCorteModel.propietario?.toString().trim()) {
@@ -183,13 +193,13 @@ export class CorteServicioComponent implements OnInit  {
 this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParentesco==null || this._reclamo.idTipoGradoParentesco==0  
 */
 
-  onRowSelect(x:any){
-   //console.log(x)
+  /*onRowSelect(x:any){
+   
 
     /*if( this._gestionCorteModel.idTipoEstServicioCab==undefined || this._gestionCorteModel.idTipoEstServicioCab==null || this._gestionCorteModel.idTipoEstServicioCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Estado de Servicio");
     return;
-    }*/
+    }* /
 
     if( this._gestionCorteModel.idMotivoOperacionCab==undefined || this._gestionCorteModel.idMotivoOperacionCab==null || this._gestionCorteModel.idMotivoOperacionCab==0  ){
       this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");
@@ -275,7 +285,7 @@ if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
     "El usuario no tiene deuda desea cargar para corte"
   );
   return;
-}*/
+}* /
 
 const ultimoItem = this._listadoCore?.at(-1);
 
@@ -296,15 +306,99 @@ if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
 
 }
      
-console.log("existeDeuda:", ultimoItem);
 
-  }
+
+  }*/
 
   /*eliminarDeSeleccionados(facturacion: any) {
     this.mesesSeleccionados = this.mesesSeleccionados.filter(
       (f) => f.nroFacturacion !== facturacion.nroFacturacion
     );
   }*/
+
+    async onRowSelect(x: any) {
+
+      console.log(x)
+
+      if (!this._gestionCorteModel.idMotivoOperacionCab) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");
+        return;
+      }
+    
+      if (!this._gestionCorteModel.idServiceCab) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Servis");
+        return;
+      }
+    
+      if (!this._gestionCorteModel.codInspectorCabecera) {
+        this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Inspector");
+        return;
+      }
+    
+      const duplicado = this._listadoCore?.some(f => f.nroSuministro === x.nroSuministro);
+      if (duplicado) {
+        this.messageService.add({
+          severity: "warn",
+          summary: "Aviso de usuario",
+          detail: "El Registro ya se encuentra Asignado",
+          life: 3000
+        });
+        return;
+      }
+    
+      let core = new DetallePadronCorte();
+    
+      core.propietario = x.propietario;
+      core.nroSuministro = x.nroSuministro;
+      core.idInspector = this._gestionCorteModel.codInspectorCabecera;
+      core.deudaCobrable = x.deudaCobrable;
+      core.fechaCorte = x.fechaCorte;
+    
+      // 👉 función final
+      const ejecutar = () => {
+        this._listadoCore = [...(this._listadoCore || []), core];
+        this._listaCorte = this._listaCorte.filter(f => f.nroSuministro !== x.nroSuministro);
+      };
+    
+      // 🔹 1. Validar fecha corte
+      //const existeFechaCorte = this._listaCorte?.some(item => !!item.fechaCorte);
+      const existeFechaCorte = this._listadoCore?.some(item => item.fechaCorte != null);
+
+      if (existeFechaCorte) {
+        const res = await Swal.fire({
+          title: 'Aviso de Usuario',
+          text: 'El usuario tiene corte previo el día ¿desea continuar?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'
+        });
+    
+        if (!res.isConfirmed) return;
+      }
+    
+      const ultimoItem = this._listadoCore?.at(-1);
+
+      if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0){
+
+
+      // 🔹 2. Validar deuda
+      //if (Number(x.deudaCobrable) === 0) {
+        const res = await Swal.fire({
+          title: 'Aviso de Usuario',
+          text: 'El usuario no tiene deuda ¿desea cargar para corte?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'
+        });
+    
+        if (!res.isConfirmed) return;
+      }
+    
+      // 🔥 3. SIEMPRE termina aquí si pasa todo
+      ejecutar();
+    }
 
   removeCore(idx:any){
     /*console.log(idx)*/

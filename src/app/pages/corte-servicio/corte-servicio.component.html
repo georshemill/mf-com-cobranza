@@ -29,11 +29,25 @@
                                             <label>Localidad</label>
                                         </p-floatlabel>
                                     </div>
-                                    <div class="col-span-12 md:col-span-6" >
+                                    <!--<div class="col-span-12 md:col-span-6" >
                                         <p-floatlabel variant="on">
                                             <p-inputnumber  class="w-full" [(ngModel)]="_gestionCorteModel.nroSuministro"  (keydown.enter)="BuscarCliente()" 
                                                 (input)="_gestionCorteModel.propietario= null;"/>
                                             <label>Suministro</label>
+                                        </p-floatlabel>
+                                    </div>-->
+                                    <div class="col-span-12 md:col-span-6" >
+                                        <p-floatlabel variant="on">
+                                            <!--<p-inputnumber class="w-full" [(ngModel)]="_gestionCorteModel.nroSuministro"  (keydown.enter)="BuscarCliente()" 
+                                                (input)="_gestionCorteModel.propietario= null;"/>
+                                            <label>Suministro</label>-->
+                                            <p-inputnumber
+    class="w-full"
+    [(ngModel)]="_gestionCorteModel.nroSuministro"
+    (ngModelChange)="onSuministroChange($event)"
+    (keydown.enter)="BuscarCliente()">
+</p-inputnumber>
+<label>Suministro</label>
                                         </p-floatlabel>
                                     </div>
                                     <div class="col-span-12 md:col-span-12" >
