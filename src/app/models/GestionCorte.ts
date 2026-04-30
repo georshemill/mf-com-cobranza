@@ -40,6 +40,7 @@ export class GestionCorte{
   idTipoEstServicioCab: number | null = null;
   idMotivoOperacionCab: number | null = null;
   fechacorteDpl: string | null = null;
+  fechaCorteCampo: string | null = null;
   anio: string | null = null;
   nombreMes: string | null = null;
   coreList:DetallePadronCorte[] = []

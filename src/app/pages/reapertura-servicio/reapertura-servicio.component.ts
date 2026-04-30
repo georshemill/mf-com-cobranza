@@ -424,6 +424,7 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     this._gestionCorteModel.idMotivoOperacion=this._gestionCorteModel.idMotivoOperacionCab
     this._gestionCorteModel.idService=this._gestionCorteModel.idServiceCab
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
+    this._gestionCorteModel.fechaCorteCampo =this.funcionesService.devolverFecha2(this._gestionCorteModel.fechacorteDpl) 
     this._gestionCorteModel.coreList=this._listadoCore
 
     //console.log(this._gestionCorteModel)

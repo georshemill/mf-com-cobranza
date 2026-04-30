@@ -121,6 +121,31 @@ devolverFecha(fecha: any): string {
       ((fecha.getDate() < 10) ? '0' + fecha.getDate() : fecha.getDate()) ;
 }
 
+devolverFecha2(fecha: any): string {
+  if (!fecha) return '';
+
+  // Caso: objeto tipo {year, month, day}
+  if (fecha.year && fecha.month && fecha.day) {
+    fecha = new Date(fecha.year, fecha.month - 1, fecha.day);
+  }
+
+  // Caso: string u otro
+  if (!(fecha instanceof Date)) {
+    fecha = new Date(fecha);
+  }
+
+  if (isNaN(fecha.getTime())) {
+    console.error('Fecha inválida:', fecha);
+    return '';
+  }
+
+  const yyyy = fecha.getFullYear();
+  const mm = (fecha.getMonth() + 1).toString().padStart(2, '0');
+  const dd = fecha.getDate().toString().padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 devolverAnio(fecha: any): string {
   return '' +fecha.getFullYear() 
 }

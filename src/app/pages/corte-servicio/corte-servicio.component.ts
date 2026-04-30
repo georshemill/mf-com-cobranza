@@ -458,8 +458,11 @@ if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
     //const fechaCorte = new Date(this._gestionCorteModel.fechaCorte);
 
 
-
-
+    this._gestionCorteModel.nroOrdenCore=null
+    this._gestionCorteModel.idMotivoOperacion=this._gestionCorteModel.idMotivoOperacionCab
+    this._gestionCorteModel.idService=this._gestionCorteModel.idServiceCab
+    this._gestionCorteModel.fechaCorteCampo =this.funcionesService.devolverFecha2(this._gestionCorteModel.fechacorteDpl) 
+    
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
     
     this._gestionCorteModel.coreList=this._listadoCore
