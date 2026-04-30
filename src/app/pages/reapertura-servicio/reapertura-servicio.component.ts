@@ -230,10 +230,29 @@ this._reclamo.idTipoGradoParentesco==undefined || this._reclamo.idTipoGradoParen
     
       let core = new DetallePadronCorte();
     
-      core.propietario = x.propietario;
+      /*core.propietario = x.propietario;
       core.nroSuministro = x.nroSuministro;
       core.idInspector = this._gestionCorteModel.codInspectorCabecera;
-      core.deudaCobrable = x.deudaCobrable;
+      core.deudaCobrable = x.deudaCobrable;*/
+
+      core.propietario=x.propietario
+      core.nroSuministro=x.nroSuministro
+      core.idTipoCorteAgua=this._gestionCorteModel.tipoCorteAguaCabecera
+      core.idTipoCorteDesague=this._gestionCorteModel.tipoCorteDesCab
+      core.coreAgua=this._gestionCorteModel.coreAguaCabecera
+      core.coreAlca=this._gestionCorteModel.coreAlcaCabecera
+      core.idInspector=this._gestionCorteModel.codInspectorCabecera
+      core.inspector=this._gestionCorteModel.inspectorCabecera
+      core.descripcionCorte=this._gestionCorteModel.descripcionCorteCab
+      core.descripcionServis=this._gestionCorteModel.descripcionServisCab
+      core.idEstadoServicio=this._gestionCorteModel.idTipoEstServicioCab
+      core.idMotivoOperacion=this._gestionCorteModel.idMotivoOperacionCab
+      core.fechaCorteCampo=this._gestionCorteModel.fechacorteDpl
+      core.anio=x.anio
+      core.nombreMes=x.nombreMes
+      core.idService=this._gestionCorteModel.idServiceCab
+      core.fechaLimiteSolicitud=this._gestionCorteModel.fechaLimiteDpl
+      core.deudaCobrable=x.deudaCobrable
     
       // (completa lo demás igual que ya lo haces)
     
