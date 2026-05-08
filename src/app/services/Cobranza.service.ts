@@ -576,6 +576,10 @@ export class CobranzaService {
         return this.http.post<ListResponse<SaldoCuenta[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ReportFacturacionXPeriodo`,model);
     }
 
+    ExcelReapertura(reporte: GestionPadronCorte[]) {
+        return this.http.post(`https://gateway8054.emapasalas.net.pe/Cobranza/Excel/PadronReapertura`,reporte,{ responseType: 'blob' });
+      }
+
     
 
 }
