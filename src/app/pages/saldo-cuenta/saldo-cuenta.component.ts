@@ -165,6 +165,11 @@ viewExcel(){
 }
 
 
+cuentasXcobrar(){
+   this.urlView=`${this.urlImpresion}/cobranza/saldosXPeriodo_02.php?IdEmpresa=1&IdSede=${this.idSedeTk}&IdCiclo=${this._facMensualModel.idCiclo}&IdSucursal=${this._facMensualModel.idSucursal}&Anio=${this._facMensualModel.anio}&Mes=${this._facMensualModel.mes}&Tipo=0` ;
+  this.displayPDF=true
+}
+
 
 }
 
