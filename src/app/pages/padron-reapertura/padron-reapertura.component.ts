@@ -67,12 +67,18 @@ export class PadronReaperturaServicioComponent implements OnInit {
   blockTable:number=0
   blockTableCore:number=0
   cicli!: string
+  fechaActual = new Date();
+  
 
   _TipoOperacion:{ idTipoOperacion:number, descripcion:string }[] = [
     {idTipoOperacion: 1, descripcion: 'CORTE'},
     {idTipoOperacion: 2, descripcion: 'REAPERTURA'}]
 
-    
+  _TipoReporte:{ idTipoReporte:number, descripcion:string }[] = [
+      {idTipoReporte: 1, descripcion: 'USUARIOS SIN DEUDA'},
+      {idTipoReporte: 2, descripcion: 'SOLO DEUDA DEL MES'},
+      {idTipoReporte: 3, descripcion: 'CON AMORTIZACION'}]
+
 
   tabs = [
     { title: 'Gestion de Notificación', value: "0", icon: 'pi pi-user-edit' },
@@ -112,7 +118,7 @@ export class PadronReaperturaServicioComponent implements OnInit {
       this._servis=respuesta.data
     })
 
-    this.cobranzaService.dropdownTipoMotivoOperacion(1).subscribe((respuesta) => {
+    this.cobranzaService.dropdownTipoMotivoOperacion(2).subscribe((respuesta) => {
       this._tipoMotivOpe=respuesta.data
     })
 
@@ -124,6 +130,14 @@ export class PadronReaperturaServicioComponent implements OnInit {
       this._localidadReporte = respuesta.data;
     });
 
+    this._gestionCorteModel.idOrdenamiento=2
+    this._gestionCorteModel.idTipoReporte=1
+   
+    this._gestionCorteModel.fechaInicioPagoDpl = new Date();
+    this._gestionCorteModel.fechaInicioPagoDpl.setHours(0, 0, 0, 0);
+
+    this._gestionCorteModel.fechaFinPagoDpl = new Date();
+    this._gestionCorteModel.fechaFinPagoDpl.setHours(23, 59, 0, 0);
     
 
 
@@ -186,6 +200,20 @@ export class PadronReaperturaServicioComponent implements OnInit {
     this._gestionCorteModel.idSede=this.idSedeTk
     this._gestionCorteModel.idEmpresa=this.idEmpresaTk
 
+    const fechas = [
+      'fechaInicioPago',
+      'fechaFinPago',
+    ]
+
+    fechas.forEach((campo) => {
+      const campoDpl = `${campo}Dpl`;
+      if ((this._gestionCorteModel as any)[campo] !== (this._gestionCorteModel as any)[campoDpl]) {
+        (this._gestionCorteModel as any)[campo] = this.funcionesService.devolverFechaHora(
+          (this._gestionCorteModel as any)[campoDpl]
+        );
+      }
+    });
+
     showGlobalLoader()
     this.cobranzaService.consultaListaReap(this._gestionCorteModel).subscribe({
       next: (data) => {
@@ -243,11 +271,12 @@ export class PadronReaperturaServicioComponent implements OnInit {
           this._gestionCorteModel.sectorList=[]
           this._gestionCorteModel.tipoServicioList=[]
           this._gestionCorteModel.estadoServicioList=[]
-          this._gestionCorteModel.idService=null
-          this._gestionCorteModel.idMotivoOperacion=null
-          this._gestionCorteModel.descripcion=null
-          this._gestionCorteModel.fechaInicioDpl=null
-          this._gestionCorteModel.fechaLimiteDpl=null
+          //this._gestionCorteModel.idService=null //
+          //this._gestionCorteModel.idMotivoOperacion=null//
+          //this._gestionCorteModel.descripcion=null//
+          //this._gestionCorteModel.fechaInicioDpl=null//
+          //this._gestionCorteModel.fechaLimiteDpl=null//
+          this._gestionCorteModel.idTipoOperacion=2
           this.blockTable = 1;
           hideGlobalLoader()
           this.impPadron=respuesta.dataId

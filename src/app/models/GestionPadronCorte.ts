@@ -61,9 +61,15 @@ export class GestionPadronCorte{
 	descripcion: string | null = null;
 	idService: number | null = null;
 	fechaInicio: string | null = null;
-	fechaInicioDpl: string | null = null;
+	fechaInicioDpl: Date | null = null;
+  fechaFin: string | null = null;
+	fechaFinDpl: Date | null = null;
 	fechaLimite: string | null = null;
 	fechaLimiteDpl: string | null = null;
+  fechaInicioPago: string | null = null;
+  fechaInicioPagoDpl: Date | null = null;
+  fechaFinPago: string | null = null;
+  fechaFinPagoDpl: Date | null = null;
   usuarioCreacion: string | null = null;
 
 

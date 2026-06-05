@@ -56,6 +56,28 @@
                                     <label>Estado Servicio</label>
                                 </p-floatlabel>
                             </div>
+                            <div class="col-span-12 md:col-span-4 md:col-start-3">
+                                <p-floatlabel variant="on" >
+                                    <p-datepicker [showIcon]="true" [showTime]="true"
+                                    hourFormat="24" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechaInicioPagoDpl" styleClass="w-full"/>
+                                    <label >Fecha de Pago Inicial</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-4 ">
+                                <p-floatlabel variant="on" >
+                                    <!--<p-datepicker  dateFormat="yy-mm-dd"  [showTime]="true" [hourFormat]="12"[showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCorteModel.fechaFinDpl" styleClass="w-full"/>-->
+                                    <p-datepicker
+                                    [showTime]="true"
+                                    hourFormat="24"
+                                    [showIcon]="true"
+                                    appendTo="body"
+                                    [(ngModel)]="_gestionCorteModel.fechaFinPagoDpl"
+                                    styleClass="w-full">
+                                </p-datepicker>
+                                    <label >Fecha de Pago Final</label>
+                                </p-floatlabel>
+                                
+                            </div>
                             <!--<div  class="col-span-12 md:col-span-3" >
                                 <p-fieldset legend="Nro. Meses Adeudados">
                                     <div class="grid grid-cols-12 gap-4 ">
@@ -100,11 +122,18 @@
                                                 (onChange)="setCheckboxValue('incluyeRefinanciamiento', $event.checked)"/>
                                             <label for="ny" class="ml-2">Incluye deuda refinanciada</label>
                                         </div>-->
-                                        <div  class="col-span-12 md:col-span-6" >
+                                        <div  class="col-span-12 md:col-span-4" >
                                             <p-floatlabel variant="on"><!--(onChange)="changeLocalidad($event.value)"  [(ngModel)]="_gestionCorteModel.idSucursal"-->
                                                 <p-select [options]="_tipOrdenamiento" optionLabel="descripcion" optionValue="idTipoOrdenamiento"   
                                                     filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"  [(ngModel)]="_gestionCorteModel.idOrdenamiento"  ></p-select> 
                                                 <label>Ordenado Por</label>
+                                            </p-floatlabel>
+                                        </div>
+                                        <div  class="col-span-12 md:col-span-4" >
+                                            <p-floatlabel variant="on">
+                                                <p-select [options]="_TipoReporte" optionLabel="descripcion" optionValue="idTipoReporte"   
+                                                    filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"  [(ngModel)]="_gestionCorteModel.idTipoReporte"  ></p-select> 
+                                                <label>Tipo de Reporte</label>
                                             </p-floatlabel>
                                         </div>
                                         <div class="col-span-12 md:col-span-2">
