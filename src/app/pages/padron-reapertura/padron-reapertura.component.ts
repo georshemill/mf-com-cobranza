@@ -241,6 +241,7 @@ export class PadronReaperturaServicioComponent implements OnInit {
   GuardarCorte(){
 
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
+    this._gestionCorteModel.idTipoOperacion=2
 
     const fechas = [
       'fechaInicio',

@@ -556,8 +556,8 @@ export class CobranzaService {
 
     //REAPERTURA
 
-    registraReapertura(model: GestionCorte): Observable<Mensaje> {
-        return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registraReapertura`, model);
+    registraReapertura(model: GestionCorte): Observable<Mensaje> {//https://gateway8054.emapasalas.net.pe
+        return this.http.post<Mensaje>(`http://localhost:8054/Cobranza/registraReapertura`, model);
     }
 
     reporteCore(model: ReporteCore): Observable<ListResponse<ReporteCore[]>> {
