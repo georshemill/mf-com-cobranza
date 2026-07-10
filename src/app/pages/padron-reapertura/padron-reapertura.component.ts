@@ -200,6 +200,61 @@ export class PadronReaperturaServicioComponent implements OnInit {
     this._gestionCorteModel.idSede=this.idSedeTk
     this._gestionCorteModel.idEmpresa=this.idEmpresaTk
 
+    if ( this._gestionCorteModel.idCiclo==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Ciclo.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.idSucursal==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Localidad.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.sectorList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Sector.",
+        life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.sectorList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Sector.",
+        life: 3000
+      });
+      return;
+    }
+    
+    if ( this._gestionCorteModel.tipoServicioList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Tipo de Servicio.",
+        life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.estadoServicioList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Estado de Servicio.",
+        life: 3000
+      });
+      return;
+    }
+
+
     const fechas = [
       'fechaInicioPago',
       'fechaFinPago',
@@ -240,6 +295,20 @@ export class PadronReaperturaServicioComponent implements OnInit {
 
   GuardarCorte(){
 
+    if ( this._gestionCorteModel.idService==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Service.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.idMotivoOperacion==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Motivo Operacion.", life: 3000
+      });
+      return;
+    }
+
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
     this._gestionCorteModel.idTipoOperacion=2
 
@@ -257,17 +326,36 @@ export class PadronReaperturaServicioComponent implements OnInit {
       }
     });
 
-    this._gestionCorteModel.clienteList = this._listaCorte.map(g => ({
+    /*this._gestionCorteModel.clienteList = this._listaCorte.map(g => ({
+      nroSuministro: g.nroSuministro!,
+      idEstadoServicio: g.idEstadoServicio!,
+      deudaTotal: g.deudaCobrable!
+    }));*/
+
+    const seleccionados = this.getSelectedRows();
+
+    this._gestionCorteModel.clienteList = seleccionados.map(g => ({
       nroSuministro: g.nroSuministro!,
       idEstadoServicio: g.idEstadoServicio!,
       deudaTotal: g.deudaCobrable!
     }));
 
+
+    if ( this._gestionCorteModel.clienteList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Registro.",
+        life: 3000
+      });
+      return;
+    }
+
     showGlobalLoader()
     this.cobranzaService.registraPadronCorte(this._gestionCorteModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
-          this._gestionCorteModel.idCiclo=null
+          /*this._gestionCorteModel.idCiclo=null
           this._gestionCorteModel.idSucursal=null
           this._gestionCorteModel.sectorList=[]
           this._gestionCorteModel.tipoServicioList=[]
@@ -276,9 +364,31 @@ export class PadronReaperturaServicioComponent implements OnInit {
           //this._gestionCorteModel.idMotivoOperacion=null//
           //this._gestionCorteModel.descripcion=null//
           //this._gestionCorteModel.fechaInicioDpl=null//
-          //this._gestionCorteModel.fechaLimiteDpl=null//
+          //this._gestionCorteModel.fechaLimiteDpl=null*/
           this._gestionCorteModel.idTipoOperacion=2
-          this.blockTable = 1;
+          //this.blockTable = 1;
+          this.cobranzaService.consultaListaReap(this._gestionCorteModel).subscribe({
+            next: (data) => {
+              if (data.data.length != 0) {
+                this._listaCorte = data.data;
+                this.initSelection(); 
+                //this.blockTable = 1;
+                hideGlobalLoader()
+              } else {
+                hideGlobalLoader()
+                this.funcionesService.popupError("Búsqueda sin información", "");
+                this._listaCorte = [];
+               // this.blockTable=0
+              }
+            },
+            error: (err) => {
+              hideGlobalLoader()
+              this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+              this._listaCorte = [];
+              //this.blockTable=0
+            }
+          });
+
           hideGlobalLoader()
           this.impPadron=respuesta.dataId
           let mensajeAlert="Se Genero Orden de Corte Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"

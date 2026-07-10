@@ -341,7 +341,7 @@
                                     <div  class="col-span-12 md:col-span-3" >
                                         <p-floatlabel variant="on"> 
                                             <p-select [options]="_TipoOperacion" optionLabel="descripcion" optionValue="idTipoOperacion" 
-                                                filterBy="descripcion" [filter]="true" [(ngModel)]="_reporteCoreModel.idTipoOperacion"  class="w-full" appendTo="body" ></p-select> 
+                                                filterBy="descripcion" [filter]="true" [(ngModel)]="_reporteCoreModel.idTipoOperacion" [disabled]="true" class="w-full" appendTo="body" ></p-select> 
                                             <label>Tipo Operacion</label>
                                         </p-floatlabel>
                                     </div>

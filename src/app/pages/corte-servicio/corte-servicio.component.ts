@@ -318,7 +318,7 @@ if (ultimoItem && Number(ultimoItem.deudaCobrable) === 0) {
 
     async onRowSelect(x: any) {
 
-      console.log(x)
+
 
       if (!this._gestionCorteModel.idMotivoOperacionCab) {
         this.funcionesService.popupError("Aviso de Usuario","Debe Seleccionar Motivo de Operacion");

@@ -96,6 +96,9 @@ export class PadronCorteServicioComponent implements OnInit {
 
   init(){
 
+    this._reporteCoreModel.idSucursal=this.idSedeTk
+    this._reporteCoreModel.idTipoOperacion=1
+
     this.cobranzaService.dropdownTipoServicio().subscribe((respuesta) => {
       this._tipoServicio=respuesta.data
     })
@@ -183,6 +186,53 @@ export class PadronCorteServicioComponent implements OnInit {
   
 
   Gestionar(){
+
+   
+    if ( this._gestionCorteModel.idCiclo==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Ciclo.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.idSucursal==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Localidad.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.sectorList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Sector.",
+        life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.tipoServicioList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Tipo de Servicio.",
+        life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.estadoServicioList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Estado de Servicio.",
+        life: 3000
+      });
+      return;
+    }
+
+
     this._gestionCorteModel.idSede=this.idSedeTk
     this._gestionCorteModel.idEmpresa=this.idEmpresaTk
 
@@ -212,6 +262,23 @@ export class PadronCorteServicioComponent implements OnInit {
 
   GuardarCorte(){
 
+
+    if ( this._gestionCorteModel.idService==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Service.", life: 3000
+      });
+      return;
+    }
+
+    if ( this._gestionCorteModel.idMotivoOperacion==null ) {
+      this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
+        detail: "Debe Seleccionar Motivo Operacion.", life: 3000
+      });
+      return;
+    }
+
+   
+
     this._gestionCorteModel.usuarioCreacion=this.usuarioTk
 
     const fechas = [
@@ -228,17 +295,36 @@ export class PadronCorteServicioComponent implements OnInit {
       }
     });
 
-    this._gestionCorteModel.clienteList = this._listaCorte.map(g => ({
+    /*this._gestionCorteModel.clienteList = this._listaCorte.map(g => ({
+      nroSuministro: g.nroSuministro!,
+      idEstadoServicio: g.idEstadoServicio!,
+      deudaTotal: g.deudaCobrable!
+    }));*/
+
+    const seleccionados = this.getSelectedRows();
+
+    this._gestionCorteModel.clienteList = seleccionados.map(g => ({
       nroSuministro: g.nroSuministro!,
       idEstadoServicio: g.idEstadoServicio!,
       deudaTotal: g.deudaCobrable!
     }));
 
+
+    if ( this._gestionCorteModel.clienteList.length === 0) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Aviso de usuario",
+        detail: "Debe seleccionar al menos un Registro.",
+        life: 3000
+      });
+      return;
+    }
+
     showGlobalLoader()
     this.cobranzaService.registraPadronCorte(this._gestionCorteModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
-          this._gestionCorteModel.idCiclo=null
+          /*this._gestionCorteModel.idCiclo=null
           this._gestionCorteModel.idSucursal=null
           this._gestionCorteModel.sectorList=[]
           this._gestionCorteModel.tipoServicioList=[]
@@ -248,7 +334,28 @@ export class PadronCorteServicioComponent implements OnInit {
           this._gestionCorteModel.descripcion=null
           this._gestionCorteModel.fechaInicioDpl=null
           this._gestionCorteModel.fechaLimiteDpl=null
-          this.blockTable = 1;
+          this.blockTable = 1;*/
+          this.cobranzaService.consultaListaCorte(this._gestionCorteModel).subscribe({
+            next: (data) => {
+              if (data.data.length != 0) {
+                this._listaCorte = data.data;
+                this.initSelection(); 
+                hideGlobalLoader()
+              } else {
+                hideGlobalLoader()
+                this.funcionesService.popupError("Búsqueda sin información", "");
+                this._listaCorte = [];
+                //this.blockTable=0
+              }
+            },
+            error: (err) => {
+              hideGlobalLoader()
+              this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+              this._listaCorte = [];
+              //this.blockTable=0
+            }
+          });
+
           hideGlobalLoader()
           this.impPadron=respuesta.dataId
           let mensajeAlert="Se Genero Orden de Corte Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
@@ -280,14 +387,14 @@ export class PadronCorteServicioComponent implements OnInit {
           hideGlobalLoader()
           this.funcionesService.popupError("Error de Ejecucion", respuesta.message);
           this._listaCorte = [];
-          this.blockTable=0
+          //this.blockTable=0
         }
       },
       error: (err) => {
         hideGlobalLoader()
         this.funcionesService.popupError("Error de Ejecucion", "Intente nuevamente");
         this._listaCorte = [];
-        this.blockTable=0
+        //this.blockTable=0
       }
     });
 
@@ -303,7 +410,7 @@ export class PadronCorteServicioComponent implements OnInit {
       return;
     }
 
-    if (!this._reporteCoreModel.nroOrdenCore && !this._reporteCoreModel.descripcion) {
+    /*if (!this._reporteCoreModel.nroOrdenCore && !this._reporteCoreModel.descripcion) {
       this.messageService.add({
         severity: "warn",
         summary: "Aviso de usuario",
@@ -311,7 +418,7 @@ export class PadronCorteServicioComponent implements OnInit {
         life: 3000
       });
       return;
-    }
+    }*/
 
     if ( this._reporteCoreModel.idTipoOperacion==null ) {
       this.messageService.add({severity: "warn",  summary: "Aviso de usuario",
@@ -347,14 +454,20 @@ export class PadronCorteServicioComponent implements OnInit {
           this._listaCore = data.data;
           hideGlobalLoader()
           this.blockTableCore = 1;
+          this._reporteCoreModel.idSucursal=this.idSedeTk
+          this._reporteCoreModel.idTipoOperacion=1
         } else {
           hideGlobalLoader()
+          this._reporteCoreModel.idSucursal=this.idSedeTk
+          this._reporteCoreModel.idTipoOperacion=1
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._listaCorte = [];
           this.blockTableCore=0
         }
       },
       error: (err) => {
+        this._reporteCoreModel.idSucursal=this.idSedeTk
+        this._reporteCoreModel.idTipoOperacion=1
         hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._listaCorte = [];
