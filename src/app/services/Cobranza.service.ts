@@ -529,7 +529,7 @@ export class CobranzaService {
     }
 
     registraPadronCorte(model: GestionPadronCorte): Observable<Mensaje> {
-        return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registrarPadronCoredasas`, model);
+        return this.http.post<Mensaje>(`https://gateway8054.emapasalas.net.pe/Cobranza/registrarPadronCore`, model);
     }
 
     dropdownLocalidadXsede(idSede: number): Observable<ListResponse<Localidad[]>> {
