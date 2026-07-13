@@ -373,17 +373,17 @@ export class PadronReaperturaServicioComponent implements OnInit {
                 this._listaCorte = data.data;
                 this.initSelection(); 
                 //this.blockTable = 1;
-                hideGlobalLoader()
+                //hideGlobalLoader()
               } else {
-                hideGlobalLoader()
-                this.funcionesService.popupError("Búsqueda sin información", "");
+                //hideGlobalLoader()
+                //this.funcionesService.popupError("Búsqueda sin información", "");
                 this._listaCorte = [];
                // this.blockTable=0
               }
             },
             error: (err) => {
-              hideGlobalLoader()
-              this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+              //hideGlobalLoader()
+              //this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
               this._listaCorte = [];
               //this.blockTable=0
             }

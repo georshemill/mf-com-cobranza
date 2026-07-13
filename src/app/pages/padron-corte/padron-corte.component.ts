@@ -335,26 +335,7 @@ export class PadronCorteServicioComponent implements OnInit {
           this._gestionCorteModel.fechaInicioDpl=null
           this._gestionCorteModel.fechaLimiteDpl=null
           this.blockTable = 1;*/
-          this.cobranzaService.consultaListaCorte(this._gestionCorteModel).subscribe({
-            next: (data) => {
-              if (data.data.length != 0) {
-                this._listaCorte = data.data;
-                this.initSelection(); 
-                hideGlobalLoader()
-              } else {
-                hideGlobalLoader()
-                this.funcionesService.popupError("Búsqueda sin información", "");
-                this._listaCorte = [];
-                //this.blockTable=0
-              }
-            },
-            error: (err) => {
-              hideGlobalLoader()
-              this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
-              this._listaCorte = [];
-              //this.blockTable=0
-            }
-          });
+          
 
           hideGlobalLoader()
           this.impPadron=respuesta.dataId
@@ -393,6 +374,27 @@ export class PadronCorteServicioComponent implements OnInit {
       error: (err) => {
         hideGlobalLoader()
         this.funcionesService.popupError("Error de Ejecucion", "Intente nuevamente");
+        this._listaCorte = [];
+        //this.blockTable=0
+      }
+    });
+
+    this.cobranzaService.consultaListaCorte(this._gestionCorteModel).subscribe({
+      next: (data) => {
+        if (data.data.length != 0) {
+          this._listaCorte = data.data;
+          this.initSelection(); 
+          //hideGlobalLoader()
+        } else {
+          //hideGlobalLoader()
+          //this.funcionesService.popupError("Búsqueda sin información", "");
+          this._listaCorte = [];
+          //this.blockTable=0
+        }
+      },
+      error: (err) => {
+        //hideGlobalLoader()
+        //this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._listaCorte = [];
         //this.blockTable=0
       }
