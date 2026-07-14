@@ -545,8 +545,19 @@ export class PadronCorteServicioComponent implements OnInit {
     return this._listaCorte.filter((_, i) => this.selectedItems[i]);
   }
 
-  viewPDF(){
-    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${this._listaCore[0].nroOrdenCore}`;
+  viewPDF(x:any){
+    this.urlView=`${this.urlImpresion}/cortes/ordenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${x.nroOrdenCore}`;
+    this.displayPDF=true
+  }
+
+  notiDeuda(x:any){
+    this.urlView=`${this.urlImpresion}/cobranza/NotificacionDeuda.php?IdEmpresa=1&IdSede=${this.idSedeTk}&IdSucursal=${x.idSucursal}&NroOrdenCoRe=${x.nroOrdenCore}`;
+    this.displayPDF=true
+  }
+
+  notiCorte(x:any){
+
+    this.urlView=`${this.urlImpresion}/cobranza/NotificacionCorte.php?IdEmpresa=1&IdSede=${this.idSedeTk}&IdSucursal=${x.idSucursal}&NroOrdenCoRe=${x.nroOrdenCore}`;
     this.displayPDF=true
   }
 

@@ -381,6 +381,9 @@
                                         <th class="text-center">Rango Meses Inicial</th>
                                         <th class="text-center">Usuario Creacion</th>
                                         <th class="text-center" >Fecha Registro</th>
+                                        <th style="text-align: center;">Imprimir Padron</th>
+                                        <th style="text-align: center;">Notificación Deuda</th>
+                                        <th style="text-align: center;">Notificación Corte</th>
                                     </tr>
                                 </ng-template>
                                 <ng-template #body let-core>
@@ -392,7 +395,7 @@
                                             {{core.sucursal}}
                                         </td>
                                         <td class="text-center">  
-                                            {{core.nroOrdenCoRe}}
+                                            {{core.nroOrdenCore}}
                                         </td>
                                         <td class="text-center">  
                                             {{core.tipoOperacion}}
@@ -430,13 +433,22 @@
                                         <td class="text-center">  
                                             {{core.fechaRegistro | date:'yyyy-MM-dd hh:mm' }}
                                         </td>
+                                        <td style="text-align: right;">
+                                            <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="viewPDF(core)" pTooltip="Imprimir Padron"tooltipPosition="top" type="button"></button>
+                                          </td>  
+                                          <td style="text-align: right;">
+                                            <button pButton pRipple icon="pi pi-eraser" class="p-button-info h-8 w-8 mr-2"  (click)="notiDeuda(core)" pTooltip="Notificación Deuda" tooltipPosition="top" type="button"></button>
+                                          </td>  
+                                          <td style="text-align: right;">
+                                            <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="notiCorte(core)" pTooltip="Notificación Corte"tooltipPosition="top" type="button"></button>
+                                          </td>  
                                     </tr>
                                 </ng-template>
                         </p-table>
                         </div>
-                        <div class="col-span-12 md:col-span-2">
+                        <!--<div class="col-span-12 md:col-span-2">
                             <button pButton pRipple icon="pi pi-print" (click)="viewPDF()"  severity="success"  label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockTableCore ==1" ></button>
-                        </div>
+                        </div>-->
                     </div>
                 </p-tabpanel>
             </p-tabpanels>
