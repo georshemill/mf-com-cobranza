@@ -433,14 +433,14 @@
                                         <td class="text-center">  
                                             {{core.fechaRegistro | date:'yyyy-MM-dd hh:mm' }}
                                         </td>
-                                        <td style="text-align: right;">
+                                        <td style="text-align: center;">
                                             <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="viewPDF(core)" pTooltip="Imprimir Padron"tooltipPosition="top" type="button"></button>
                                           </td>  
-                                          <td style="text-align: right;">
-                                            <button pButton pRipple icon="pi pi-eraser" class="p-button-info h-8 w-8 mr-2"  (click)="notiDeuda(core)" pTooltip="Notificación Deuda" tooltipPosition="top" type="button"></button>
+                                          <td style="text-align: center;">
+                                            <button pButton pRipple icon="pi pi-chart-bar" class="p-button-info h-8 w-8 mr-2"  (click)="notiDeuda(core)" pTooltip="Notificación Deuda" tooltipPosition="top" type="button"></button>
                                           </td>  
-                                          <td style="text-align: right;">
-                                            <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="notiCorte(core)" pTooltip="Notificación Corte"tooltipPosition="top" type="button"></button>
+                                          <td style="text-align: center;">
+                                            <button pButton pRipple icon="pi pi-clipboard" class="p-button-success h-8 w-8 mr-2" (click)="notiCorte(core)" pTooltip="Notificación Corte"tooltipPosition="top" type="button"></button>
                                           </td>  
                                     </tr>
                                 </ng-template>
