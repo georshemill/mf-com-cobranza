@@ -561,5 +561,10 @@ export class PadronCorteServicioComponent implements OnInit {
     this.displayPDF=true
   }
 
+  registroCore(x:any){
+
+    this.urlView=`${this.urlImpresion}/cobranza/registraCoreOrdenCore.php?idempresa=1&idsede=${this.idSedeTk}&nroordencore=${x.nroOrdenCore}&usuarioCreacion=${x.usuarioCreacion}`;
+    this.displayPDF=true
+  }
 
 }

@@ -384,6 +384,7 @@
                                         <th style="text-align: center;">Imprimir Padron</th>
                                         <th style="text-align: center;">Notificación Deuda</th>
                                         <th style="text-align: center;">Notificación Corte</th>
+                                        <th style="text-align: center;">Registro Corte</th>
                                     </tr>
                                 </ng-template>
                                 <ng-template #body let-core>
@@ -441,6 +442,9 @@
                                           </td>  
                                           <td style="text-align: center;">
                                             <button pButton pRipple icon="pi pi-clipboard" class="p-button-success h-8 w-8 mr-2" (click)="notiCorte(core)" pTooltip="Notificación Corte"tooltipPosition="top" type="button"></button>
+                                          </td>  
+                                          <td style="text-align: center;">
+                                            <button pButton pRipple icon="pi pi-clipboard" class="p-button-warning h-8 w-8 mr-2" (click)="registroCore(core)" pTooltip="Registro Corte"tooltipPosition="top" type="button"></button>
                                           </td>  
                                     </tr>
                                 </ng-template>
