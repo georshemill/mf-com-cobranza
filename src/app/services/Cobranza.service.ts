@@ -580,6 +580,10 @@ export class CobranzaService {
         return this.http.post(`https://gateway8054.emapasalas.net.pe/Cobranza/Excel/PadronReapertura`,reporte,{ responseType: 'blob' });
       }
 
+    ExcelCorte(reporte: GestionPadronCorte[]) {
+        return this.http.post(`https://gateway8054.emapasalas.net.pe/Cobranza/Excel/PadronCorteServicio`,reporte,{ responseType: 'blob' });
+    }
+
     
 
 }
