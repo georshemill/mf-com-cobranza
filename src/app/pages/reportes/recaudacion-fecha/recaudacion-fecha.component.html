@@ -1,0 +1,200 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">📊</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">RECAUDACIÓN POR FECHA</div>
+                <div class="font-bold text-primary">Gestion de Recaudación</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <fieldset class="border border-gray-300 rounded-lg p-5">
+            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+              Búsqueda Personalizada
+            </legend>
+            <div class="grid grid-cols-12 gap-4 ">
+                <!--<div class="col-span-12 md:col-span-3 ">
+                    <p-floatlabel variant="on">< !--(onChange)="onSelectSede($event.value)"  -- >
+                        <p-select [options]="_sede" optionLabel="nombre"  optionValue="idSede" filterBy="descripcion" [filter]="true"
+                                  [(ngModel)]="_cuadreModel.idSedeBsq"  class="w-full" appendTo="body"  ></p-select> 
+                        <label>Sede</label>
+                    </p-floatlabel>
+                </div>-->
+                <div class="col-span-12 md:col-span-4 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" filterBy="descripcion" [filter]="true"
+                                    class="w-full" appendTo="body"  [(ngModel)]="_cuadreModel.idSucursal"  ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-4 ">
+                    <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
+                        <p-select [options]="_car" optionLabel="descripcion"  optionValue="idCar" filterBy="descripcion" [filter]="true"
+                            [(ngModel)]="_cuadreModel.car"  class="w-full" appendTo="body"  ></p-select> 
+                        <label>CAR</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-4 ">
+                    <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
+                        <p-select [options]="_cajero" optionLabel="cajero"  optionValue="cajero" filterBy="cajero" [filter]="true"
+                                  [(ngModel)]="_cuadreModel.cajero"  class="w-full" appendTo="body"  ></p-select> 
+                        <label>Cajero</label>
+                    </p-floatlabel>
+                </div>
+
+                <div class="col-span-12 md:col-span-2 md:col-start-4 ">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDpl" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
+                        <label >Fecha Inicio</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDplFin" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
+                        <label >Fecha Fin</label>
+                    </p-floatlabel>
+                </div>
+                <!--<div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-print"  severity="success" (click)="viewPDF()" label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockPadron ==1" ></button>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-print"  severity="primary" (click)="viewPDF2()" label="Padron 02" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockPadron ==1" ></button>
+                </div>-->
+                <div class="col-span-12 md:col-span-3 flex flex-wrap  gap-2">
+                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>	          
+                    <button pButton pRipple icon="pi pi-eye"  severity="warn" (click)="Resumen()" label="Ver Resumen" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockTable ==1" ></button>   
+                </div>
+            </div>
+        </fieldset>
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                @for (tab of tabs; track tab.value) {
+                    <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                                <div class="card flex flex-col gap-4 w-full">
+                                    <div class="grid grid-cols-12 gap-4 ">
+                                        <div  class="col-span-12 md:col-span-12" *ngIf="blockTable ==1">
+                                                        <p-table #dt [value]="_cuadrexTipo"  [rows]="20"  scrollable="true" scrollHeight="600px"
+                                                            [rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                                                            >
+                                                            <ng-template #caption>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="header">
+                                                                <tr >
+                                                                    <th class="text-center" >NroPlanilla</th>
+                                                                    <th class="text-center" >Car</th>
+                                                                    <th class="text-center" >UsuarioCreacion</th>
+                                                                    <th class="text-center" >IdCar</th>
+                                                                    <th class="text-center" >DiaPago</th>
+                                                                    <th class="text-center" >Agua</th>
+                                                                    <th class="text-center" >Alcantarillado</th>
+                                                                    <th class="text-center" >CargoFijo</th>
+                                                                    <th class="text-center" >Interes</th>
+                                                                    <th class="text-center" >OtrosConceptos</th>
+                                                                    <th class="text-center" >IGV</th>
+                                                                    <th class="text-center" >Redondeo Anterior</th>
+                                                                    <th class="text-center" >Redondeo Actual</th>
+                                                                    <th class="text-center" >TotalMes</th>
+                                                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100" class="text-center" >ImpCanje</th>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template #body let-concepto>
+                                                                <tr (mouseenter)="toggleOptions($event, options, user)" (mouseleave)="toggleOptions($event, options, user)">
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nroPlanilla}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nombreCar}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.usuarioCreacion}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.idCar}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.diaPago}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impAgua | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impAlcantarillado | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impCargoFijo | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impInteres | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impOtrosConceptos | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impIGV | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.redondeoAnterior | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.redondeoActual | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <td  style="text-align: right;" >
+                                                                        {{concepto.impTotalMes | number : '1.2-2'}}
+                                                                    </td>
+                                                                    <!--<td  pFrozenColumn frozenAlign="right" style="right: 0;" class="frozen-right-cell">
+                                                                        {{concepto.impCanje | number : '1.2-2'}}
+                                                                    </td>-->
+                                                                    <td pFrozenColumn frozenAlign="right" style="right: 0;" class="frozen-right-cell">
+                                                                        <div style="text-align: right;">
+                                                                            <span #user >
+                                                                                {{ concepto.impCanje | number : '1.2-2' }}
+                                                                            </span>
+                                                                            <div style="display: none" #options>
+                                                                                <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="viewDetalle(concepto)" pTooltip="Detalle Recaudacion" tooltipPosition="top" type="button"></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="footer">
+                                                                <tr>
+                                                                    <td [colSpan]="5" style="text-align: right;" class="font-bold p-3 pb-0">TOTAL</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impAgua| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impAlcantarillado| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impCargoFijo| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impInteres| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impOtrosConceptos| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impIGV| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.redondeoAnterior| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.redondeoActual| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impTotalMes| number:'1.2-2' }}</td>
+                                                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.impCanje| number:'1.2-2' }}</td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        </p-table>
+                                                        <!--<button pButton pRipple icon="pi pi-print" class="p-button-info  mr-2" pTooltip="Imprimir " (click)="viewDetalle()"  tooltipPosition="top" type="button" label="Detalle Recaudacion"></button>-->
+
+                                        </div>
+                                    </div>
+                                </div>
+                   
+
+                </p-tabpanel>
+                
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>
+
+<p-dialog  [(visible)]="displayPDF" modal="modal" showEffect="fade" [style]="{height:'1600px',width:'1550px'}">
+    <iframe width="100%" height="100%"   [src]="urlView |safe:'resourceUrl'"></iframe>
+</p-dialog>

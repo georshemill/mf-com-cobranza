@@ -62,6 +62,12 @@ export const routes: Routes = [
           import('./pages/reportes/venta-periodo/venta-periodo.component').then((c) => c.VentaPeriodoComponent),
       },
 
+      {
+        path: 'comercial/cobranza/ResumRecaudFecha',
+        loadComponent: () =>
+          import('./pages/reportes/recaudacion-fecha/recaudacion-fecha.component').then((c) => c.RecaudacionFechaComponent),
+      },
+
 
 
       

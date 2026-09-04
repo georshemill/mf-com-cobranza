@@ -86,6 +86,9 @@ import { Paramae } from '../models/Paramae';
 import { ReporteCore } from '../models/ReporteCore';
 import { Calendario } from '../models/Calendario';
 import { SaldoCuenta } from '../models/SaldoCuenta';
+import { Cajero } from '../models/Cajero';
+import { Car } from '../models/Car';
+import { GestionCuadre } from '../models/GestionCuadre';
 
 
 
@@ -584,6 +587,17 @@ export class CobranzaService {
         return this.http.post(`https://gateway8054.emapasalas.net.pe/Cobranza/Excel/PadronCorteServicio`,reporte,{ responseType: 'blob' });
     }
 
+    dropdowCajero(idEmpresa: number,idSede: number): Observable<ListResponse<Cajero[]>> {
+        return this.http.get<ListResponse<Cajero[]>>(`https://gateway1.emapasalas.net.pe/Cajero/dropdown/${idEmpresa}/${idSede}`);
+    }
+
+    dropdownCar(idEmpresa: number,idSede:number,user: string): Observable<ListResponse<Car[]>> {
+        return this.http.get<ListResponse<Car[]>>(`https://gateway1.emapasalas.net.pe/Car/dropdown/${idEmpresa}/${idSede}/${user}`);
+    }
+
+    CobranzaxFecha(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ReportCobranzaxFecha`,model);
+    }
     
 
 }
