@@ -61,15 +61,36 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/reportes/venta-periodo/venta-periodo.component').then((c) => c.VentaPeriodoComponent),
       },
-
       {
         path: 'comercial/cobranza/ResumRecaudFecha',
         loadComponent: () =>
           import('./pages/reportes/recaudacion-fecha/recaudacion-fecha.component').then((c) => c.RecaudacionFechaComponent),
       },
+      {
+        path: 'comercial/cobranza/altosConsumidores',
+        loadComponent: () =>
+          import('./pages/altos-consumidores/altos-consumidores.component').then((c) => c.AltosConsumidoresComponent),
+      },
+      {
+        path: 'comercial/cobranza/caidaConsumo',
+        loadComponent: () =>
+          import('./pages/caidas-consumos/caidas-consumos.component').then((c) => c.CaidasConsumosComponent),
+      },
+      {
+        path: 'comercial/cobranza/altonconpago',
+        loadComponent: () =>
+          import('./pages/cuadro-cobranza/cuadro-cobranza.component').then((c) => c.CuadroCobranzaComponent),
+      },
+      {
+        path: 'comercial/cobranza/altonindicencia',
+        loadComponent: () =>
+          import('./pages/alto-incidencia/alto-incidencia.component').then((c) => c.AltoIncidenciaComponent),
+      },
 
 
 
+
+      
       
       
 

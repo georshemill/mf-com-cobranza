@@ -89,6 +89,7 @@ import { SaldoCuenta } from '../models/SaldoCuenta';
 import { Cajero } from '../models/Cajero';
 import { Car } from '../models/Car';
 import { GestionCuadre } from '../models/GestionCuadre';
+import { AltosConsumidores } from '../models/AltosConsumidores';
 
 
 
@@ -598,6 +599,13 @@ export class CobranzaService {
     CobranzaxFecha(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
         return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ReportCobranzaxFecha`,model);
     }
+
+    ListarAltosConsumidores(model:Partial<AltosConsumidores>): Observable<ListResponse<AltosConsumidores[]>> {
+        return this.http.post<ListResponse<AltosConsumidores[]>>(`https://gateway8054.emapasalas.net.pe/Cobranza/ListAltosConsumidores`,model);
+    }
     
+    dropdownLocalidadxSede(idSede: number): Observable<ListResponse<Localidad[]>> {
+        return this.http.get<ListResponse<Localidad[]>>(`https://gateway1.emapasalas.net.pe/Localidad/dropdownxSede/${idSede}`);
+    }
 
 }
