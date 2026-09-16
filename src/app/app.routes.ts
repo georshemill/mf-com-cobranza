@@ -86,6 +86,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/alto-incidencia/alto-incidencia.component').then((c) => c.AltoIncidenciaComponent),
       },
+      {
+        path: 'comercial/cobranza/cuadroComparativo',
+        loadComponent: ()=>
+          import('./pages/cuadro-comparativo/cuadro-comparativo.component').then(
+            (m)=>m.CuadroComparativoComponent
+          )
+      },
 
 
 
